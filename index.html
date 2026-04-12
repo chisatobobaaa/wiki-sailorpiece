@@ -1,0 +1,367 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:transparent}
+
+.w{max-width:900px;margin:0 auto;padding:0 0 3rem}
+
+.hero{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:16px;padding:0;margin-bottom:1.5rem;overflow:hidden}
+.hero-top{padding:1.75rem 2rem 1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.hero-wordmark{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hero-anchor{width:36px;height:36px;border-radius:8px;background:#FAEEDA;border:0.5px solid #EF9F27;display:flex;align-items:center;justify-content:center;font-size:18px}
+.hero-title{font-size:24px;font-weight:500;color:var(--color-text-primary);letter-spacing:-0.3px}
+.hero-title em{color:#BA7517;font-style:normal}
+.hero-sub{font-size:13px;color:var(--color-text-secondary);line-height:1.5;max-width:420px}
+.hero-stats{display:flex;gap:1.5rem}
+.hstat{text-align:center}
+.hstat-n{font-size:20px;font-weight:500;color:#BA7517}
+.hstat-l{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.hero-bar{height:3px;background:var(--color-border-tertiary);display:flex}
+.hero-bar-fill{height:100%;background:#EF9F27;width:100%}
+.hero-tags{padding:10px 2rem 1.25rem;display:flex;gap:6px;flex-wrap:wrap}
+.htag{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:var(--color-background-primary)}
+.htag.new{background:#FAEEDA;color:#633806;border-color:#EF9F27}
+.htag.warn{background:#EAF3DE;color:#27500A;border-color:#97C459}
+
+.nav{display:flex;gap:0;margin-bottom:1.5rem;background:var(--color-background-secondary);border-radius:12px;padding:4px;border:0.5px solid var(--color-border-tertiary)}
+.nb{flex:1;padding:9px 4px;font-size:12px;font-weight:500;border-radius:9px;border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all 0.15s;text-align:center;white-space:nowrap}
+.nb:hover{color:var(--color-text-primary)}
+.nb.on{background:var(--color-background-primary);color:#BA7517;border:0.5px solid var(--color-border-secondary)}
+
+.sec{display:none}.sec.on{display:block}
+
+.notice{border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:8px;border:0.5px solid}
+.notice-ice{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.notice-moon{background:#EEEDFE;border-color:#7F77DD;color:#3C3489}
+.notice-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.nd-ice{background:#BA7517}
+.nd-moon{background:#534AB7}
+
+.tier-section{margin-bottom:6px}
+.tier-row{display:flex;border-radius:10px;overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:5px}
+.tier-lbl{width:52px;min-width:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 0;gap:2px}
+.tier-letter{font-size:16px;font-weight:500;color:white}
+.tier-dot-row{display:flex;gap:2px}
+.tier-star{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.5)}
+.t-sp .tier-lbl{background:#E24B4A}
+.t-s  .tier-lbl{background:#BA7517}
+.t-a  .tier-lbl{background:#1D9E75}
+.t-b  .tier-lbl{background:#185FA5}
+.t-c  .tier-lbl{background:#888780}
+.tier-chips{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:var(--color-background-secondary);flex:1;align-items:center}
+
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:20px;font-size:12px;font-weight:500;color:var(--color-text-primary);cursor:pointer;transition:all 0.12s;user-select:none;line-height:1.2}
+.chip:hover,.chip.on{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.ci{font-size:13px;line-height:1}
+
+.card-detail{border-radius:12px;padding:1.5rem;margin:8px 0 12px;display:none;border:0.5px solid #EF9F27;background:var(--color-background-primary)}
+.card-detail.open{display:block}
+.cd-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:8px}
+.cd-title-row{display:flex;align-items:center;gap:10px}
+.cd-icon{width:42px;height:42px;border-radius:10px;background:#FAEEDA;border:0.5px solid #EF9F27;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.cd-name{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.cd-badges{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;border:0.5px solid}
+.b-myth{background:#FCEBEB;color:#791F1F;border-color:#E24B4A}
+.b-leg{background:#FAEEDA;color:#633806;border-color:#EF9F27}
+.b-sp{background:#FAEEDA;color:#633806;border-color:#BA7517}
+.b-rare{background:#E6F1FB;color:#0C447C;border-color:#378ADD}
+.cd-close{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:6px;color:var(--color-text-secondary);cursor:pointer;font-size:13px;padding:4px 8px;line-height:1}
+.cd-close:hover{color:var(--color-text-primary)}
+.cd-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:14px;padding:10px 12px;background:var(--color-background-secondary);border-radius:8px}
+
+.cd-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cd-section-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px}
+.stat-bar{margin-bottom:8px}
+.sb-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.sb-key{color:var(--color-text-secondary)}
+.sb-val{font-weight:500;color:var(--color-text-primary)}
+.sb-track{height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.sb-fill{height:100%;border-radius:3px}
+
+.how-box{background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+.how-box b{color:var(--color-text-primary);font-weight:500}
+
+.moves-wrap{margin-top:12px}
+.moves-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.move-pill{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:7px 11px;min-width:96px;text-align:center}
+.move-k{font-size:13px;font-weight:500;color:#BA7517}
+.move-n{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+
+.bcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:1.5rem}
+.bcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;overflow:hidden}
+.bcard-head{padding:12px 14px 10px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.bcard-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.bcard-icon.gold{background:#FAEEDA;border:0.5px solid #EF9F27}
+.bcard-icon.purple{background:#EEEDFE;border:0.5px solid #7F77DD}
+.bcard-icon.green{background:#EAF3DE;border:0.5px solid #97C459}
+.bcard-icon.blue{background:#E6F1FB;border:0.5px solid #85B7EB}
+.bcard-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.bcard-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.bcard-body{padding:10px 14px}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.brow:last-child{border-bottom:none}
+.bk{color:var(--color-text-secondary)}
+.bv{font-weight:500;color:var(--color-text-primary);text-align:right}
+.bv.gold{color:#BA7517}
+
+.race-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
+.rcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:14px 16px}
+.rcard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.rcard-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.rcard-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px}
+.rcard-bars{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+
+.clans{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}
+.clan{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:10px 12px}
+.clan-name{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.cn-lbl{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.clan-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.clan-desc .g{color:#BA7517;font-weight:500}
+
+.tips-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
+.tip{display:flex;gap:12px;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:14px 16px}
+.tip-num{width:28px;height:28px;min-width:28px;border-radius:8px;background:#FAEEDA;border:0.5px solid #EF9F27;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#854F0B}
+.tip-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.tip-text{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+
+.locs{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:8px;margin-top:8px}
+.loc{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:10px 12px}
+.loc-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.loc-dot{width:7px;height:7px;border-radius:50%;background:#EF9F27;flex-shrink:0}
+.loc-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+
+.sec-head{font-size:11px;font-weight:500;letter-spacing:0.8px;color:var(--color-text-tertiary);text-transform:uppercase;margin:1.5rem 0 10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sec-head:first-child{margin-top:0}
+
+.dmg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:1.5rem}
+.dmg-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:12px 14px}
+.dmg-icon{font-size:20px;margin-bottom:8px}
+.dmg-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.dmg-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+</style>
+
+<h2 class="sr-only">Sailor Piece Wiki — panduan lengkap sword, melee, build, dan tier list untuk Roblox</h2>
+
+<div class="w">
+
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <div class="hero-wordmark">
+        <div class="hero-anchor">⚓</div>
+        <div class="hero-title">Sailor<em>Piece</em> Wiki</div>
+      </div>
+      <div class="hero-sub">Panduan lengkap tier list sword, melee, build terbaik, race, clan, dan tips untuk pemain Roblox Sailor Piece.</div>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">45+</div><div class="hstat-l">Weapons</div></div>
+      <div class="hstat"><div class="hstat-n">5</div><div class="hstat-l">Tier</div></div>
+      <div class="hstat"><div class="hstat-n">Sea 2</div><div class="hstat-l">Soon</div></div>
+    </div>
+  </div>
+  <div class="hero-tags">
+    <span class="htag new">✦ Ice Update — 8 Apr 2026</span>
+    <span class="htag new">Moon Update — 31 Mar 2026</span>
+    <span class="htag warn">2x Luck Event aktif</span>
+    <span class="htag">Frost Boss tersedia</span>
+    <span class="htag">Frostbane Clan baru</span>
+  </div>
+  <div class="hero-bar"><div class="hero-bar-fill"></div></div>
+</div>
+
+<div class="nav">
+  <button class="nb on" onclick="tab('sword',this)">⚔ Sword</button>
+  <button class="nb" onclick="tab('melee',this)">✊ Melee</button>
+  <button class="nb" onclick="tab('build',this)">🏗 Build</button>
+  <button class="nb" onclick="tab('race',this)">🧬 Race & Clan</button>
+  <button class="nb" onclick="tab('tips',this)">💡 Tips</button>
+</div>
+
+<div id="s-sword" class="sec on">
+  <div class="notice notice-ice"><div class="notice-dot nd-ice"></div><div><b>Ice Queen (S+)</b> ditambahkan Ice Update 8 April — V Move AoE masif + iFrames ~2 detik cooldown, tercepat di antara S+ swords. Butuh Frostbane Clan untuk unlock V Move. Klik nama sword untuk detail.</div></div>
+  <div id="wd" class="card-detail"></div>
+  <div class="sec-head">Tier list sword — Ice Update 2026</div>
+  <div class="tier-row t-sp"><div class="tier-lbl"><div class="tier-letter">S+</div><div class="tier-dot-row"><div class="tier-star"></div><div class="tier-star"></div></div></div><div class="tier-chips"><div class="chip" onclick="sw('sm',this)"><span class="ci">👑</span>Shadow Monarch</div><div class="chip" onclick="sw('iq',this)"><span class="ci">❄</span>Ice Queen</div><div class="chip" onclick="sw('ta',this)"><span class="ci">🌙</span>True Aizen</div><div class="chip" onclick="sw('at',this)"><span class="ci">⚡</span>Atomic</div></div></div>
+  <div class="tier-row t-s"><div class="tier-lbl"><div class="tier-letter">S</div></div><div class="tier-chips"><div class="chip" onclick="sw('ae',this)"><span class="ci">🌊</span>Abyssal Empress</div><div class="chip" onclick="sw('ym',this)"><span class="ci">🗡</span>Yamato</div><div class="chip" onclick="sw('tm',this)"><span class="ci">🔮</span>True Manipulator</div></div></div>
+  <div class="tier-row t-a"><div class="tier-lbl"><div class="tier-letter">A</div></div><div class="tier-chips"><div class="chip"><span class="ci">⚔</span>Jinwoo</div><div class="chip"><span class="ci">🔥</span>Saber Alter</div><div class="chip"><span class="ci">💫</span>Ichigo</div><div class="chip"><span class="ci">✨</span>Escanor</div></div></div>
+  <div class="tier-row t-b"><div class="tier-lbl"><div class="tier-letter">B</div></div><div class="tier-chips"><div class="chip"><span class="ci">⚔</span>Gryphon</div><div class="chip"><span class="ci">⚔</span>Dark Blade</div><div class="chip"><span class="ci">⚔</span>Bisento</div></div></div>
+  <div class="tier-row t-c"><div class="tier-lbl"><div class="tier-letter">C</div></div><div class="tier-chips"><div class="chip"><span class="ci">⚔</span>Katana</div><div class="chip"><span class="ci">⚔</span>Cutlass</div></div></div>
+</div>
+
+<div id="s-melee" class="sec">
+  <div class="notice notice-moon"><div class="notice-dot nd-moon"></div><div><b>Moon Slayer + Strongest Shinobi</b> — dua melee terkuat post Moon Update (31 Mar 2026). Keduanya punya AoE besar, DPS tinggi, dan performa luar biasa untuk PvP dan boss farming. Klik untuk detail.</div></div>
+  <div id="md" class="card-detail"></div>
+  <div class="sec-head">Tier list melee / fighting style</div>
+  <div class="tier-row t-sp"><div class="tier-lbl"><div class="tier-letter">S+</div><div class="tier-dot-row"><div class="tier-star"></div><div class="tier-star"></div></div></div><div class="tier-chips"><div class="chip" onclick="ml('ms',this)"><span class="ci">🌙</span>Moon Slayer</div><div class="chip" onclick="ml('ss',this)"><span class="ci">🥷</span>Strongest Shinobi</div></div></div>
+  <div class="tier-row t-s"><div class="tier-lbl"><div class="tier-letter">S</div></div><div class="tier-chips"><div class="chip" onclick="ml('gm',this)"><span class="ci">🏺</span>Gilgamesh</div><div class="chip" onclick="ml('an',this)"><span class="ci">👁</span>Anos</div><div class="chip" onclick="ml('bm',this)"><span class="ci">✨</span>Blessed Maiden</div><div class="chip"><span class="ci">⚔</span>Saber Alter</div></div></div>
+  <div class="tier-row t-a"><div class="tier-lbl"><div class="tier-letter">A</div></div><div class="tier-chips"><div class="chip"><span class="ci">👊</span>Strongest in History</div><div class="chip"><span class="ci">🔱</span>Alucard</div><div class="chip"><span class="ci">🌀</span>Acheron</div></div></div>
+  <div class="tier-row t-b"><div class="tier-lbl"><div class="tier-letter">B</div></div><div class="tier-chips"><div class="chip"><span class="ci">👊</span>Qin Shi</div><div class="chip"><span class="ci">⚡</span>Madoka</div></div></div>
+</div>
+
+<div id="s-build" class="sec">
+  <div class="sec-head">Meta builds terbaik — April 2026</div>
+  <div class="bcards">
+    <div class="bcard"><div class="bcard-head"><div class="bcard-icon gold">👑</div><div><div class="bcard-title">Sword Meta Build</div><div class="bcard-sub">Damage maksimum</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Sword</span><span class="bv gold">Shadow Monarch</span></div><div class="brow"><span class="bk">Race</span><span class="bv">Swordblessed</span></div><div class="brow"><span class="bk">Clan</span><span class="bv">Pride / Upper</span></div><div class="brow"><span class="bk">Trait</span><span class="bv">Emperor</span></div><div class="brow"><span class="bk">Spec Passive</span><span class="bv">Rampage</span></div><div class="brow"><span class="bk">Title</span><span class="bv gold">Six Eyed Demon</span></div><div class="brow"><span class="bk">Fruit</span><span class="bv">Light / Quake</span></div><div class="brow"><span class="bk">Accessory</span><span class="bv">Moon Outfit</span></div></div></div>
+    <div class="bcard"><div class="bcard-head"><div class="bcard-icon purple">🥷</div><div><div class="bcard-title">Melee Meta Build</div><div class="bcard-sub">Burst + AoE</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Melee</span><span class="bv gold">Moon Slayer</span></div><div class="brow"><span class="bk">Race</span><span class="bv">Warlord / Servant</span></div><div class="brow"><span class="bk">Clan</span><span class="bv gold">Upper (+40% DMG)</span></div><div class="brow"><span class="bk">Trait</span><span class="bv">Emperor / Celestial</span></div><div class="brow"><span class="bk">Spec Passive</span><span class="bv">Rampage + Berserker</span></div><div class="brow"><span class="bk">Title</span><span class="bv gold">Six Eyed Demon</span></div><div class="brow"><span class="bk">Power</span><span class="bv">Colossus</span></div><div class="brow"><span class="bk">Accessory</span><span class="bv">Moon Outfit</span></div></div></div>
+    <div class="bcard"><div class="bcard-head"><div class="bcard-icon green">🌾</div><div><div class="bcard-title">Farming Build</div><div class="bcard-sub">Drop rate & efisiensi</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Sword</span><span class="bv">Atomic / Yamato</span></div><div class="brow"><span class="bk">Race</span><span class="bv gold">Kitsune (+25% Luck)</span></div><div class="brow"><span class="bk">Clan</span><span class="bv">Eminence</span></div><div class="brow"><span class="bk">Trait</span><span class="bv">Emperor</span></div><div class="brow"><span class="bk">Spec Passive</span><span class="bv">Fortune Chosen</span></div><div class="brow"><span class="bk">Fruit</span><span class="bv">Quake (AoE)</span></div><div class="brow"><span class="bk">Lokasi</span><span class="bv">Shibuya Station</span></div></div></div>
+    <div class="bcard"><div class="bcard-head"><div class="bcard-icon blue">🆕</div><div><div class="bcard-title">Early / Mid Game</div><div class="bcard-sub">Pemula</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Sword</span><span class="bv">Gryphon → Ichigo</span></div><div class="brow"><span class="bk">Melee</span><span class="bv gold">Qin Shi (murah)</span></div><div class="brow"><span class="bk">Race</span><span class="bv">Fishman (leveling)</span></div><div class="brow"><span class="bk">Clan</span><span class="bv">Monarch / Espada</span></div><div class="brow"><span class="bk">Fruit</span><span class="bv">Flame (early AoE)</span></div><div class="brow"><span class="bk">Goal</span><span class="bv">Skill Tree Lv.7000</span></div></div></div>
+  </div>
+  <div class="sec-head">Cara maksimalkan damage</div>
+  <div class="dmg-grid">
+    <div class="dmg-card"><div class="dmg-icon">⚔</div><div class="dmg-title">Upgrade ke B10</div><div class="dmg-desc">Blessing NPC di Shibuya Station. Weapon cuma 50% efektif tanpa max blessing. Pasang Spec Passive Rampage untuk damage buff terbesar.</div></div>
+    <div class="dmg-card"><div class="dmg-icon">📊</div><div class="dmg-title">Skill Tree (Lv.7000)</div><div class="dmg-desc">Beri 1000 Gems ke Skill Master di Slime Island. Prioritaskan Damage dan Critical Hit. Max juga stats dari Boss Rush dan Infinite Tower shop.</div></div>
+    <div class="dmg-card"><div class="dmg-icon">👑</div><div class="dmg-title">Title Six Eyed Demon</div><div class="dmg-desc">+85% Damage Buff — terbesar di game. Drop dari Moon Slayer boss. Extreme mode: 1.25% drop rate. Normal: 0.7%.</div></div>
+    <div class="dmg-card"><div class="dmg-icon">🌀</div><div class="dmg-title">Haki + Colossus</div><div class="dmg-desc">Unlock semua Haki, Conqueror Haki cap: 35. Gunakan Colossus Power. Abyssal Crown Set artifact dari high-level NPCs. Rune cap: 60.</div></div>
+  </div>
+</div>
+
+<div id="s-race" class="sec">
+  <div class="sec-head">Race terbaik — Ice Update 2026</div>
+  <div class="race-list">
+    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Luckborn</span><span class="badge b-sp">S+ · Mythical · Baru</span></div><div class="rcard-desc">+35% Luck Multiplier · buff sword & melee DMG. Ditambahkan Ice Update 8 April 2026 — terbaik untuk farming rare drops saat ini.</div><div class="rcard-bars"><div class="stat-bar"><div class="sb-row"><span class="sb-key">Luck</span><span class="sb-val">100</span></div><div class="sb-track"><div class="sb-fill" style="width:100%;background:#1D9E75"></div></div></div><div class="stat-bar"><div class="sb-row"><span class="sb-key">Damage</span><span class="sb-val">75</span></div><div class="sb-track"><div class="sb-fill" style="width:75%;background:#BA7517"></div></div></div></div></div>
+    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Sunborn</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">+80% Max HP · +70% DMG · +20% Sword DMG Multi · +3% Lifesteal · +10% DMG Reduction — all-around terbaik untuk PvE dan survivability.</div><div class="rcard-bars"><div class="stat-bar"><div class="sb-row"><span class="sb-key">HP</span><span class="sb-val">100</span></div><div class="sb-track"><div class="sb-fill" style="width:100%;background:#E24B4A"></div></div></div><div class="stat-bar"><div class="sb-row"><span class="sb-key">Damage</span><span class="sb-val">95</span></div><div class="sb-track"><div class="sb-fill" style="width:95%;background:#BA7517"></div></div></div></div></div>
+    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Swordblessed</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">+20% Sword DMG Multiplier — wajib untuk Sword build. Drop 0.05% (ada pity system). Pasangkan dengan Emperor trait + Shadow Monarch.</div></div>
+    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Warlord</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">Massive HP & Damage boost · Melee DMG multiplier terbesar — pilihan utama untuk Melee build. Pasangkan dengan Moon Slayer atau Strongest Shinobi.</div></div>
+    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Kitsune</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">+25% Luck · buff sword & melee DMG — raja farming boss drops dan rare items di endgame. Terbaik dipakai bersama Eminence clan.</div></div>
+  </div>
+  <div class="sec-head">Clan terbaik</div>
+  <div class="clans">
+    <div class="clan"><div class="clan-name"><span class="cn-lbl">Frostbane</span><span class="badge b-sp" style="font-size:10px">S+ · Baru</span></div><div class="clan-desc"><span class="g">+40% DMG</span> · +47% HP · +10% Sword DMG<br>Clan terkuat post Ice Update</div></div>
+    <div class="clan"><div class="clan-name"><span class="cn-lbl">Upper</span><span class="badge b-leg" style="font-size:10px">S</span></div><div class="clan-desc"><span class="g">+40% DMG</span> · +50% Max HP · +12% Melee DMG · +12% Luck</div></div>
+    <div class="clan"><div class="clan-name"><span class="cn-lbl">Alter</span><span class="badge b-leg" style="font-size:10px">S</span></div><div class="clan-desc">+35% DMG · +50% HP · +10% Melee<br>After 5 ability → <span class="g">1.5x DMG</span></div></div>
+    <div class="clan"><div class="clan-name"><span class="cn-lbl">Eminence</span><span class="badge b-leg" style="font-size:10px">S</span></div><div class="clan-desc">Best farming — <span class="g">drop rate bonus</span> + solid damage. Monarch + Alter solid alternatives.</div></div>
+    <div class="clan"><div class="clan-name"><span class="cn-lbl">Pride</span><span class="badge b-rare" style="font-size:10px">A</span></div><div class="clan-desc">+30% DMG · +45% HP · +10% Sword DMG · +10% Luck</div></div>
+    <div class="clan"><div class="clan-name"><span class="cn-lbl">Monarch</span><span class="badge b-rare" style="font-size:10px">A</span></div><div class="clan-desc">+27% DMG · +40% HP · +7% Sword DMG · +10% Luck · 20% chance +1 drop</div></div>
+  </div>
+</div>
+
+<div id="s-tips" class="sec">
+  <div class="sec-head">Tips dari pemula hingga endgame</div>
+  <div class="tips-list">
+    <div class="tip"><div class="tip-num">1</div><div><div class="tip-title">Mulai dengan Qin Shi + Gryphon</div><div class="tip-text">Keduanya murah, mudah didapat, dan cukup kuat untuk mid-game. Gryphon bisa carry sampai late-game kalau di-max. Upgrade ke Ichigo saat sudah mampu.</div></div></div>
+    <div class="tip"><div class="tip-num">2</div><div><div class="tip-title">Upgrade weapon ke B10 di Blessing NPC</div><div class="tip-text">Weapon hanya 50% efektif tanpa max blessing. Pergi ke Blessing NPC di Shibuya Station, upgrade semua ke B10 sebelum farming serius. Pasang Spec Passive Rampage.</div></div></div>
+    <div class="tip"><div class="tip-num">3</div><div><div class="tip-title">Unlock Skill Tree di Level 7000</div><div class="tip-text">Beri 1000 Gems ke Skill Master di Slime Island. Prioritaskan Damage dan Critical Hit terlebih dahulu. Max juga dari Boss Rush dan Infinite Tower shop.</div></div></div>
+    <div class="tip"><div class="tip-num">4</div><div><div class="tip-title">Incar Title Six Eyed Demon (+85% DMG)</div><div class="tip-text">Title terkuat di game, drop dari Moon Slayer boss. Farm di Extreme mode (1.25% chance) untuk efisiensi terbaik. Normal mode hanya 0.7%.</div></div></div>
+    <div class="tip"><div class="tip-num">5</div><div><div class="tip-title">Light Fruit wajib di late-game</div><div class="tip-text">Memungkinkan terbang — navigasi antar island jauh lebih cepat. Alternatif: Quake Fruit untuk AoE mob farming di Shibuya Station.</div></div></div>
+    <div class="tip"><div class="tip-num">6</div><div><div class="tip-title">Cara cepat material Ice Queen</div><div class="tip-text">Frost Relic drop dari SEMUA NPC di game — farm paling efisien di Lawless Island Arena Fighters. Butuh Frost Empress title sebelum bisa craft Ice Queen.</div></div></div>
+    <div class="tip"><div class="tip-num">7</div><div><div class="tip-title">Pakai pity system untuk race Mythical</div><div class="tip-text">Race seperti Swordblessed dan Warlord drop 0.05%, tapi ada pity system. Kumpulkan Race Rerolls dan grind sampai dapat — investasi terbaik untuk build endgame.</div></div></div>
+  </div>
+  <div class="sec-head">Lokasi penting di map</div>
+  <div class="locs">
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Sailor Island</div><div class="loc-desc">Fruit Dealer · Stats Reroll · Jinwoo Trainer · Upgrade stats ke Z tier pakai gems</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Shibuya Station</div><div class="loc-desc">Blessing NPC (upgrade B10) · Mob farming efisien dengan Quake Fruit</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Boss Island</div><div class="loc-desc">Shadow Monarch boss · Moon Slayer Trainer · Frost Boss (Ice Queen) · Double Dungeon</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Ninja Island</div><div class="loc-desc">Strongest Shinobi materials · Ninja boss fight</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Lawless Island</div><div class="loc-desc">Atomic Trainer · Arena Fighters untuk Frost Relic farming</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Academy Island</div><div class="loc-desc">Anos unlock — butuh Demon King Title sebagai prasyarat</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Slime Island</div><div class="loc-desc">Skill Master NPC — unlock Skill Tree di Lv.7000 + 1000 Gems</div></div>
+    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Tower Island</div><div class="loc-desc">Infinite Tower — farm Tower Tokens untuk items eksklusif</div></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const SW={
+  sm:{n:'Shadow Monarch',i:'👑',t:'S+',r:'Mythical',bc:'b-myth',
+    d:'Sword terkuat di game saat ini. Damage tertinggi di seluruh kategori, AoE masif, iFrames terbaik, dan crowd control luar biasa. Progression chain panjang tapi hasilnya sepadan.',
+    h:'<b>1.</b> Beli Jinwoo Sword (2.5jt Money dari Sailor Island Jinwoo Trainer) <b>2.</b> Farm Monarch Core dari Jinwoo boss <b>3.</b> Kalahkan Shadow Monarch boss di Double Dungeon (Boss Island) <b>4.</b> Beli dari Shadow Monarch Trainer di Dungeon Island rooftop (pojok kiri)',
+    s:{Damage:100,AoE:95,Speed:75,PvP:98,Farming:90},
+    mv:[['Z','Shadow Strike'],['X','Army of Shadows'],['C','Shadow Exchange'],['V','Monarch Slash'],['F','Arise (Mastery)']]},
+  iq:{n:'Ice Queen',i:'❄',t:'S+',r:'Mythical',bc:'b-sp',
+    d:'Sword terbaru dari Ice Update 8 April 2026. V Move AoE masif + iFrames dengan cooldown ~2 detik — tercepat di antara semua S+ swords. Frostbane Clan wajib untuk unlock V Move.',
+    h:'<b>Prasyarat:</b> punya Frost Empress title dulu → Kalahkan Frost Boss (summonable) di Boss Island → Farm materials: Ice Core (0.53%), Frozen Brand (1.21%), Glacier Remnant (5.37%). Frost Relic drop dari semua NPC — efisiensi terbaik di Lawless Island Arena Fighters.',
+    s:{Damage:95,AoE:98,Speed:92,PvP:88,Farming:93},
+    mv:[['Z','Frost Shard'],['X','Blizzard Slash'],['C','Ice Prison'],['V','Glacial Nova'],['F','Ice Empress (Mastery)']]},
+  ta:{n:'True Aizen',i:'🌙',t:'S+',r:'Mythical',bc:'b-myth',
+    d:'Obtainment susah tapi payoff-nya luar biasa. Cooldown skill sangat rendah sehingga bisa di-spam untuk overwhelm musuh. Performa PvP terbaik di antara semua sword.',
+    h:'Cari Aizen Trainer (lokasi update-an terbaru) · Butuh items dari Aizen boss fight · Selesaikan Mastery Quest untuk unlock F Move. Cek Discord untuk info lokasi terbaru.',
+    s:{Damage:95,AoE:85,Speed:97,PvP:100,Farming:83},
+    mv:[['Z','Shatter'],['X','Kurohitsugi'],['C','Fragor'],['V','Ultrafragor'],['F','Final Getsuga']]},
+  at:{n:'Atomic',i:'⚡',t:'S+',r:'Mythical',bc:'b-myth',
+    d:'Ditambahkan di Huge Update. AoE sangat luas dan damage tinggi — terbaik untuk farming boss dan grinding efisien. Lebih mudah didapat dibanding Shadow Monarch.',
+    h:'Beli dari Atomic Trainer di Lawless Island · Butuh Coins + Gems + specific materials. Selesaikan Mastery Quest untuk unlock F Move.',
+    s:{Damage:92,AoE:91,Speed:87,PvP:87,Farming:96},
+    mv:[['Z','Atomic Slash'],['X','Particle Beam'],['C','Nuclear Surge'],['V','Atom Buster']]},
+  ae:{n:'Abyssal Empress',i:'🌊',t:'S',r:'Legendary',bc:'b-leg',
+    d:'AoE coverage sangat baik, ideal untuk boss rush dan mob farming. Sedikit di bawah S+ dalam raw damage tapi lebih mudah didapat dan tetap top-tier endgame.',
+    h:'Ditambahkan di Huge Update · Cari Abyssal Empress Trainer di lokasi khusus · Butuh specific progression items dan quest completion.',
+    s:{Damage:88,AoE:93,Speed:82,PvP:84,Farming:91},
+    mv:[['Z','Abyss Strike'],['X','Tidal Wave'],['C','Deep Crush'],['V','Empress Wrath']]},
+  ym:{n:'Yamato',i:'🗡',t:'S',r:'Legendary',bc:'b-leg',
+    d:'DPS tinggi, AoE luas, dan multi-stage crowd control. Pilihan solid untuk endgame — alternatif terbaik jika belum dapat Shadow Monarch.',
+    h:'Beli dari Yamato Trainer di late-game island · Butuh specific quest completion dan materials.',
+    s:{Damage:87,AoE:86,Speed:90,PvP:82,Farming:87},
+    mv:[['Z','Oden Slash'],['X','Paradise Totsuka'],['C','Ragnarök'],['V','Kamusari']]},
+  tm:{n:'True Manipulator',i:'🔮',t:'S',r:'Legendary',bc:'b-leg',
+    d:'Attack speed tertinggi di tier S. Kit lengkap dan sangat baik untuk late-game farming dan boss grinding — ideal untuk gaya bermain yang cepat dan agresif.',
+    h:'Upgrade dari Manipulator base sword · Cari Trainer spesifik untuk versi True · Butuh upgrade materials.',
+    s:{Damage:86,AoE:84,Speed:96,PvP:80,Farming:89},
+    mv:[['Z','Puppet Strings'],['X','Control Zone'],['C','Manipulation Field'],['V','True Control']]}
+};
+const ML={
+  ms:{n:'Moon Slayer',i:'🌙',t:'S+',
+    d:'Melee terkuat di game saat ini — Moon Update 31 Mar 2026. Moveset sangat powerful dengan damage besar, AoE luas, dan F Move yang devastatingly kuat.',
+    h:'Kumpulkan materials spesifik dari Moon Slayer boss quest → interaksi dengan Moon Slayer NPC di Boss Island. Butuh quest progression sebelumnya.',
+    s:{Damage:100,AoE:92,Speed:85,PvP:97,Farming:90}},
+  ss:{n:'Strongest Shinobi',i:'🥷',t:'S+',
+    d:'Ditambahkan di Massive Update (sebelumnya Madara). Animasi super smooth, AoE masif, F Move devastatingly powerful. Investasi melee terbaik yang bisa kamu buat.',
+    h:'Grind Ninja Island boss materials → beli dari Trainer dengan Coins + Gems + materials. Selesaikan Mastery Quest.',
+    s:{Damage:98,AoE:95,Speed:91,PvP:93,Farming:92}},
+  gm:{n:'Gilgamesh',i:'🏺',t:'S',
+    d:'Animasi cepat dengan DPS konsisten. Pilihan solid untuk boss fights dan dungeon grinding — performa stabil di PvP dan PvE.',
+    h:'Unlock dari Academy Island atau Trainer tertentu · Butuh specific items dan quest progression.',
+    s:{Damage:90,AoE:85,Speed:96,PvP:88,Farming:87}},
+  an:{n:'Anos',i:'👁',t:'S',
+    d:'Burst damage tertinggi di melee S tier dengan AoE potential luar biasa. Butuh Demon King Title untuk unlock — perjalanan panjang yang sangat rewarding.',
+    h:'Unlock di Academy Island dengan Demon King Title · Farm title dari boss khusus terlebih dahulu.',
+    s:{Damage:95,AoE:90,Speed:82,PvP:90,Farming:85}},
+  bm:{n:'Blessed Maiden',i:'✨',t:'S',
+    d:'Limited-time dari Valentine Event, tapi masih sangat relevan di meta sekarang. All-rounder yang scale dengan baik ke endgame — gunakan jika kamu memilikinya.',
+    h:'Limited time dari Valentine Event — tidak bisa didapat lagi secara normal saat ini.',
+    s:{Damage:88,AoE:88,Speed:88,PvP:86,Farming:88}}
+};
+const BC={Damage:'#E24B4A',AoE:'#BA7517',Speed:'#1D9E75',PvP:'#185FA5',Farming:'#534AB7'};
+
+function bars(s){return Object.entries(s).map(([k,v])=>`<div class="stat-bar"><div class="sb-row"><span class="sb-key">${k}</span><span class="sb-val">${v}</span></div><div class="sb-track"><div class="sb-fill" style="width:${v}%;background:${BC[k]||'#888'}"></div></div></div>`).join('')}
+
+function renderDetail(o,isMelee){
+  const mv=(o.mv||[]).map(([k,n])=>`<div class="move-pill"><div class="move-k">${k}</div><div class="move-n">${n}</div></div>`).join('');
+  const tBadge=isMelee?`<span class="badge b-sp">${o.t} · Melee Spec</span>`:`<span class="badge ${o.bc}">${o.t} · ${o.r}</span>`;
+  return `<div class="cd-head"><div class="cd-title-row"><div class="cd-icon">${o.i}</div><div><div class="cd-name">${o.n}</div><div class="cd-badges">${tBadge}</div></div></div><button class="cd-close" onclick="closeD(this)">✕ tutup</button></div><div class="cd-desc">${o.d}</div><div class="cd-2col"><div>${bars(o.s)}</div><div><div class="cd-section-label">Cara mendapatkan</div><div class="how-box">${o.h}</div></div></div>${mv?`<div class="moves-wrap"><div class="cd-section-label">Moves</div><div class="moves-grid">${mv}</div></div>`:''}`
+}
+
+function sw(id,el){
+  const box=document.getElementById('wd');
+  const prev=box.dataset.c;
+  document.querySelectorAll('#s-sword .chip').forEach(c=>c.classList.remove('on'));
+  if(prev===id){box.classList.remove('open');box.dataset.c='';return}
+  box.dataset.c=id;box.innerHTML=renderDetail(SW[id],false);box.classList.add('open');
+  el.classList.add('on');
+  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+function ml(id,el){
+  const box=document.getElementById('md');
+  const prev=box.dataset.c;
+  document.querySelectorAll('#s-melee .chip').forEach(c=>c.classList.remove('on'));
+  if(prev===id){box.classList.remove('open');box.dataset.c='';return}
+  box.dataset.c=id;box.innerHTML=renderDetail(ML[id],true);box.classList.add('open');
+  el.classList.add('on');
+  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+function closeD(btn){
+  const box=btn.closest('.card-detail');
+  box.classList.remove('open');box.dataset.c='';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+}
+function tab(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('s-'+id).classList.add('on');btn.classList.add('on');
+  const wd=document.getElementById('wd');const md=document.getElementById('md');
+  if(wd){wd.classList.remove('open');wd.dataset.c='';}
+  if(md){md.classList.remove('open');md.dataset.c='';}
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+}
+</script>
