@@ -1,367 +1,1361 @@
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBX Store — Top Up via Gamepass</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Midtrans Snap.js — ganti data-client-key dengan Client Key kamu dari dashboard Midtrans -->
+<script src="https://app.midtrans.com/snap/snap.js" data-client-key="Mid-client-vIdf2mWg0tpgpzKH"></script>
+<!-- Untuk sandbox/testing, gunakan: https://app.sandbox.midtrans.com/snap/snap.js -->
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);background:transparent}
+  :root {
+    --bg: #060608;
+    --s1: #0e0e14;
+    --s2: #14141e;
+    --s3: #1a1a28;
+    --border: #252535;
+    --border2: #2e2e45;
+    --accent: #7c5cfc;
+    --accent-glow: rgba(124,92,252,0.25);
+    --accent2: #fc5c7d;
+    --gold: #ffc857;
+    --green: #39d98a;
+    --text: #eeeef5;
+    --muted: #6464808;
+    --muted: #636380;
+  }
 
-.w{max-width:900px;margin:0 auto;padding:0 0 3rem}
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-.hero{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:16px;padding:0;margin-bottom:1.5rem;overflow:hidden}
-.hero-top{padding:1.75rem 2rem 1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
-.hero-wordmark{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.hero-anchor{width:36px;height:36px;border-radius:8px;background:#FAEEDA;border:0.5px solid #EF9F27;display:flex;align-items:center;justify-content:center;font-size:18px}
-.hero-title{font-size:24px;font-weight:500;color:var(--color-text-primary);letter-spacing:-0.3px}
-.hero-title em{color:#BA7517;font-style:normal}
-.hero-sub{font-size:13px;color:var(--color-text-secondary);line-height:1.5;max-width:420px}
-.hero-stats{display:flex;gap:1.5rem}
-.hstat{text-align:center}
-.hstat-n{font-size:20px;font-weight:500;color:#BA7517}
-.hstat-l{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
-.hero-bar{height:3px;background:var(--color-border-tertiary);display:flex}
-.hero-bar-fill{height:100%;background:#EF9F27;width:100%}
-.hero-tags{padding:10px 2rem 1.25rem;display:flex;gap:6px;flex-wrap:wrap}
-.htag{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:var(--color-background-primary)}
-.htag.new{background:#FAEEDA;color:#633806;border-color:#EF9F27}
-.htag.warn{background:#EAF3DE;color:#27500A;border-color:#97C459}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-.nav{display:flex;gap:0;margin-bottom:1.5rem;background:var(--color-background-secondary);border-radius:12px;padding:4px;border:0.5px solid var(--color-border-tertiary)}
-.nb{flex:1;padding:9px 4px;font-size:12px;font-weight:500;border-radius:9px;border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all 0.15s;text-align:center;white-space:nowrap}
-.nb:hover{color:var(--color-text-primary)}
-.nb.on{background:var(--color-background-primary);color:#BA7517;border:0.5px solid var(--color-border-secondary)}
+  /* Animated bg */
+  .bg-fx {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-fx::before {
+    content: '';
+    position: absolute;
+    top: -30%; left: -20%;
+    width: 70%; height: 70%;
+    background: radial-gradient(ellipse, rgba(124,92,252,0.08) 0%, transparent 65%);
+    animation: bgFloat 8s ease-in-out infinite alternate;
+  }
+  .bg-fx::after {
+    content: '';
+    position: absolute;
+    bottom: -20%; right: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(ellipse, rgba(252,92,125,0.06) 0%, transparent 65%);
+    animation: bgFloat 10s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes bgFloat { from{transform:translate(0,0)} to{transform:translate(3%,4%)} }
 
-.sec{display:none}.sec.on{display:block}
+  /* Grid lines */
+  .grid-fx {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(124,92,252,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,92,252,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
 
-.notice{border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:8px;border:0.5px solid}
-.notice-ice{background:#FAEEDA;border-color:#EF9F27;color:#633806}
-.notice-moon{background:#EEEDFE;border-color:#7F77DD;color:#3C3489}
-.notice-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.nd-ice{background:#BA7517}
-.nd-moon{background:#534AB7}
+  .wrapper { position: relative; z-index: 1; }
 
-.tier-section{margin-bottom:6px}
-.tier-row{display:flex;border-radius:10px;overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:5px}
-.tier-lbl{width:52px;min-width:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 0;gap:2px}
-.tier-letter{font-size:16px;font-weight:500;color:white}
-.tier-dot-row{display:flex;gap:2px}
-.tier-star{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.5)}
-.t-sp .tier-lbl{background:#E24B4A}
-.t-s  .tier-lbl{background:#BA7517}
-.t-a  .tier-lbl{background:#1D9E75}
-.t-b  .tier-lbl{background:#185FA5}
-.t-c  .tier-lbl{background:#888780}
-.tier-chips{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;background:var(--color-background-secondary);flex:1;align-items:center}
+  /* ===== HEADER ===== */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 36px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(6,6,8,0.85);
+    backdrop-filter: blur(20px);
+    position: sticky; top: 0; z-index: 100;
+  }
 
-.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:20px;font-size:12px;font-weight:500;color:var(--color-text-primary);cursor:pointer;transition:all 0.12s;user-select:none;line-height:1.2}
-.chip:hover,.chip.on{background:#FAEEDA;border-color:#EF9F27;color:#633806}
-.ci{font-size:13px;line-height:1}
+  .logo {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.35rem;
+    letter-spacing: -1px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-gem {
+    width: 30px; height: 30px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 0 16px var(--accent-glow);
+  }
+  .logo-text { color: var(--text); }
+  .logo-text em { font-style: normal; color: var(--accent); }
 
-.card-detail{border-radius:12px;padding:1.5rem;margin:8px 0 12px;display:none;border:0.5px solid #EF9F27;background:var(--color-background-primary)}
-.card-detail.open{display:block}
-.cd-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:8px}
-.cd-title-row{display:flex;align-items:center;gap:10px}
-.cd-icon{width:42px;height:42px;border-radius:10px;background:#FAEEDA;border:0.5px solid #EF9F27;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.cd-name{font-size:18px;font-weight:500;color:var(--color-text-primary)}
-.cd-badges{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
-.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;border:0.5px solid}
-.b-myth{background:#FCEBEB;color:#791F1F;border-color:#E24B4A}
-.b-leg{background:#FAEEDA;color:#633806;border-color:#EF9F27}
-.b-sp{background:#FAEEDA;color:#633806;border-color:#BA7517}
-.b-rare{background:#E6F1FB;color:#0C447C;border-color:#378ADD}
-.cd-close{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:6px;color:var(--color-text-secondary);cursor:pointer;font-size:13px;padding:4px 8px;line-height:1}
-.cd-close:hover{color:var(--color-text-primary)}
-.cd-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:14px;padding:10px 12px;background:var(--color-background-secondary);border-radius:8px}
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .live-badge {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(57,217,138,0.08);
+    border: 1px solid rgba(57,217,138,0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.7rem;
+    color: var(--green);
+    letter-spacing: 0.5px;
+  }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
 
-.cd-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.cd-section-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px}
-.stat-bar{margin-bottom:8px}
-.sb-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
-.sb-key{color:var(--color-text-secondary)}
-.sb-val{font-weight:500;color:var(--color-text-primary)}
-.sb-track{height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
-.sb-fill{height:100%;border-radius:3px}
+  /* ===== HERO ===== */
+  .hero {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 64px 20px 32px;
+    animation: heroIn 0.6s ease both;
+  }
+  @keyframes heroIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-.how-box{background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.7}
-.how-box b{color:var(--color-text-primary);font-weight:500}
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(124,92,252,0.3);
+    background: rgba(124,92,252,0.06);
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
 
-.moves-wrap{margin-top:12px}
-.moves-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.move-pill{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:7px 11px;min-width:96px;text-align:center}
-.move-k{font-size:13px;font-weight:500;color:#BA7517}
-.move-n{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .hero h1 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+  .hero h1 .g1 { color: var(--accent); }
+  .hero h1 .g2 {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
 
-.bcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:1.5rem}
-.bcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;overflow:hidden}
-.bcard-head{padding:12px 14px 10px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
-.bcard-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.bcard-icon.gold{background:#FAEEDA;border:0.5px solid #EF9F27}
-.bcard-icon.purple{background:#EEEDFE;border:0.5px solid #7F77DD}
-.bcard-icon.green{background:#EAF3DE;border:0.5px solid #97C459}
-.bcard-icon.blue{background:#E6F1FB;border:0.5px solid #85B7EB}
-.bcard-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.bcard-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
-.bcard-body{padding:10px 14px}
-.brow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
-.brow:last-child{border-bottom:none}
-.bk{color:var(--color-text-secondary)}
-.bv{font-weight:500;color:var(--color-text-primary);text-align:right}
-.bv.gold{color:#BA7517}
+  .hero p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 480px;
+    margin: 0 auto;
+  }
 
-.race-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
-.rcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:14px 16px}
-.rcard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.rcard-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
-.rcard-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px}
-.rcard-bars{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+  /* ===== HOW IT WORKS ===== */
+  .how-section {
+    max-width: 860px;
+    margin: 0 auto 10px;
+    padding: 0 20px;
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  @media(max-width:650px) { .how-grid { grid-template-columns: repeat(2,1fr); } }
 
-.clans{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}
-.clan{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:10px 12px}
-.clan-name{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-.cn-lbl{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.clan-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
-.clan-desc .g{color:#BA7517;font-weight:500}
+  .how-step {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    animation: cardIn 0.5s ease both;
+  }
+  .how-step:nth-child(1){animation-delay:0.1s}
+  .how-step:nth-child(2){animation-delay:0.2s}
+  .how-step:nth-child(3){animation-delay:0.3s}
+  .how-step:nth-child(4){animation-delay:0.4s}
+  @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
-.tips-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
-.tip{display:flex;gap:12px;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:14px 16px}
-.tip-num{width:28px;height:28px;min-width:28px;border-radius:8px;background:#FAEEDA;border:0.5px solid #EF9F27;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#854F0B}
-.tip-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
-.tip-text{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .how-step:hover { border-color: rgba(124,92,252,0.4); transform: translateY(-3px); }
+  .how-num {
+    position: absolute; top: 10px; right: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: rgba(124,92,252,0.12);
+    line-height: 1;
+  }
+  .how-icon { font-size: 1.6rem; margin-bottom: 10px; display: block; }
+  .how-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    color: var(--text);
+  }
+  .how-desc { font-size: 0.68rem; color: var(--muted); line-height: 1.5; }
 
-.locs{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:8px;margin-top:8px}
-.loc{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:10px 12px}
-.loc-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:5px}
-.loc-dot{width:7px;height:7px;border-radius:50%;background:#EF9F27;flex-shrink:0}
-.loc-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+  /* ===== MAIN LAYOUT ===== */
+  .main {
+    max-width: 960px;
+    margin: 20px auto 0;
+    padding: 0 20px 80px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+    align-items: start;
+  }
+  @media(max-width:720px) { .main { grid-template-columns: 1fr; } }
 
-.sec-head{font-size:11px;font-weight:500;letter-spacing:0.8px;color:var(--color-text-tertiary);text-transform:uppercase;margin:1.5rem 0 10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.sec-head:first-child{margin-top:0}
+  /* ===== CARD ===== */
+  .card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border2); }
 
-.dmg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:1.5rem}
-.dmg-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:12px 14px}
-.dmg-icon{font-size:20px;margin-bottom:8px}
-.dmg-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
-.dmg-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+  .card-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+  }
+  .card-head-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(252,92,125,0.1));
+    border: 1px solid rgba(124,92,252,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .card-head-text {}
+  .card-head-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .card-head-sub { font-size: 0.67rem; color: var(--muted); margin-top: 2px; }
+
+  /* ===== PACKAGE GRID ===== */
+  .pkg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+  }
+  @media(max-width:480px) { .pkg-grid { grid-template-columns: repeat(2,1fr); } }
+
+  .pkg {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 14px 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .pkg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(124,92,252,0.08), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .pkg:hover::before { opacity: 1; }
+  .pkg:hover { border-color: rgba(124,92,252,0.45); transform: translateY(-2px); }
+  .pkg.selected {
+    border-color: var(--accent);
+    background: rgba(124,92,252,0.08);
+    box-shadow: 0 0 24px rgba(124,92,252,0.15), inset 0 0 0 1px rgba(124,92,252,0.3);
+  }
+  .pkg.selected::after {
+    content: '✓';
+    position: absolute; top: 7px; right: 9px;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.55rem;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .pkg.hot .hot-tag {
+    display: block;
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 0 0 6px 6px;
+    text-transform: uppercase;
+  }
+  .hot-tag { display: none; }
+  .pkg-emoji { font-size: 1.3rem; display: block; margin-bottom: 7px; }
+  .pkg-amount {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .pkg-price { font-size: 0.72rem; color: var(--accent); }
+  .pkg-bonus { font-size: 0.62rem; color: var(--green); margin-top: 3px; }
+
+  /* ===== INPUTS ===== */
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .field label .req { color: var(--accent2); }
+
+  .input-wrap { position: relative; }
+  .input-wrap input {
+    width: 100%;
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-wrap input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,92,252,0.1);
+  }
+  .input-wrap input::placeholder { color: rgba(100,100,128,0.6); }
+
+  .input-suffix {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 0.7rem; color: var(--muted);
+    pointer-events: none;
+  }
+  .input-hint {
+    font-size: 0.66rem;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+    display: flex; align-items: flex-start; gap: 5px;
+  }
+
+  /* ===== GAMEPASS INFO BOX ===== */
+  .gamepass-guide {
+    background: linear-gradient(135deg, rgba(124,92,252,0.06), rgba(252,92,125,0.04));
+    border: 1px solid rgba(124,92,252,0.2);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .gp-guide-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .gp-steps {
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .gp-step {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .gp-step-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(124,92,252,0.15);
+    border: 1px solid rgba(124,92,252,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  /* ===== GAMEPASS INPUT SPECIAL ===== */
+  .gp-input-box {
+    background: var(--s2);
+    border: 1px dashed rgba(124,92,252,0.4);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .gp-url-row {
+    display: flex; gap: 8px; margin-bottom: 10px;
+  }
+  .gp-url-row input {
+    flex: 1;
+    background: var(--s3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 13px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .gp-url-row input:focus { border-color: var(--accent); }
+  .gp-url-row input::placeholder { color: rgba(100,100,128,0.5); }
+  .btn-extract {
+    background: linear-gradient(135deg, var(--accent), #5b3de8);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .btn-extract:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(124,92,252,0.3); }
+
+  .gp-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+    font-size: 0.65rem; color: var(--muted); letter-spacing: 1px;
+  }
+  .gp-divider::before,.gp-divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: var(--border);
+  }
+
+  .gp-id-input {
+    width: 100%;
+    background: var(--s3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 13px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    letter-spacing: 1px;
+  }
+  .gp-id-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,0.1); }
+  .gp-id-input::placeholder { color: rgba(100,100,128,0.5); }
+
+  /* Gamepass preview card */
+  .gp-preview {
+    display: none;
+    background: var(--s3);
+    border: 1px solid rgba(57,217,138,0.25);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 12px;
+    animation: fadeIn 0.3s ease;
+  }
+  .gp-preview.show { display: flex; gap: 12px; align-items: center; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .gp-prev-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(124,92,252,0.2), rgba(252,92,125,0.15));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .gp-prev-info { flex: 1; }
+  .gp-prev-name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+    color: var(--text);
+  }
+  .gp-prev-id { font-size: 0.68rem; color: var(--muted); }
+  .gp-prev-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(57,217,138,0.1);
+    border: 1px solid rgba(57,217,138,0.3);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 0.65rem;
+    color: var(--green);
+    margin-top: 5px;
+  }
+
+  /* ===== PAYMENT ===== */
+  .pay-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .pay-btn {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .pay-btn:hover { border-color: rgba(124,92,252,0.4); }
+  .pay-btn.selected { border-color: var(--accent); background: rgba(124,92,252,0.07); }
+  .pay-icon { font-size: 1.2rem; display: block; margin-bottom: 5px; }
+  .pay-name { font-size: 0.7rem; color: var(--muted); }
+  .pay-btn.selected .pay-name { color: var(--accent); }
+
+  /* ===== SUMMARY ===== */
+  .summary {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    position: sticky; top: 80px;
+  }
+  .sum-head {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .rbx-display {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rbx-display::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(124,92,252,0.06), rgba(252,92,125,0.04));
+  }
+  .rbx-display > * { position: relative; }
+  .rbx-big {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 2.4rem;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, var(--gold), #ffa040);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .rbx-sub { font-size: 0.68rem; color: var(--muted); }
+
+  /* Gamepass mini display in summary */
+  .gp-sum-box {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 11px 13px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.75rem;
+  }
+  .gp-sum-icon { font-size: 1.1rem; }
+  .gp-sum-info { flex: 1; }
+  .gp-sum-label { color: var(--muted); font-size: 0.63rem; text-transform: uppercase; letter-spacing: 1px; }
+  .gp-sum-val {
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    color: var(--text); font-size: 0.82rem;
+    margin-top: 2px;
+  }
+  .gp-sum-val.empty { color: var(--muted); font-weight: 400; font-family: inherit; }
+
+  .sum-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.77rem;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  .sum-row .k { color: var(--muted); }
+  .sum-row .v { font-family: 'Outfit', sans-serif; font-weight: 600; }
+  .sum-divider { height: 1px; background: var(--border); margin: 12px 0; }
+  .sum-total {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .sum-total .k { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; }
+  .sum-total .v {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* Pending notice */
+  .pend-box {
+    background: rgba(255,200,87,0.06);
+    border: 1px solid rgba(255,200,87,0.2);
+    border-radius: 9px;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-size: 0.7rem;
+    color: var(--gold);
+    line-height: 1.6;
+    display: flex; gap: 8px;
+  }
+
+  /* ===== ORDER BUTTON ===== */
+  .btn-order {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent) 0%, #5b3de8 50%, var(--accent2) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 4s ease infinite;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  @keyframes gradShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  .btn-order::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: translateX(-100%);
+  }
+  .btn-order:hover::before { animation: shimmer 0.6s ease; }
+  @keyframes shimmer { to{transform:translateX(100%)} }
+  .btn-order:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(124,92,252,0.35); }
+  .btn-order:disabled {
+    background: var(--s2); color: var(--muted);
+    animation: none; cursor: not-allowed;
+    transform: none; box-shadow: none;
+    border: 1px solid var(--border);
+  }
+
+  .sum-footnote {
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 12px;
+    line-height: 1.7;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: blur(10px);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: 18px;
+    padding: 36px 28px;
+    max-width: 440px; width: 100%;
+    text-align: center;
+    animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    position: relative;
+    overflow: hidden;
+  }
+  .modal::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  @keyframes modalPop { from{opacity:0;transform:scale(0.85) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+  .modal-icon-big { font-size: 4rem; margin-bottom: 14px; display: block; animation: iconBounce 0.6s 0.3s ease both; }
+  @keyframes iconBounce { from{transform:scale(0)} to{transform:scale(1)} }
+
+  .modal h2 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .status-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(255,200,87,0.1);
+    border: 1px solid rgba(255,200,87,0.3);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+
+  .modal-progress {
+    width: 100%; height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .modal-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--gold));
+    background-size: 200% 100%;
+    animation: progAnim 1.8s ease-in-out infinite alternate, gradMove 3s linear infinite;
+    border-radius: 3px;
+    width: 55%;
+  }
+  @keyframes progAnim { from{width:25%} to{width:75%} }
+  @keyframes gradMove { from{background-position:0%} to{background-position:200%} }
+
+  .modal-desc {
+    font-size: 0.78rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px;
+  }
+
+  .order-box {
+    background: var(--s2);
+    border: 1px dashed var(--border2);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .order-box-label { font-size: 0.62rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .order-id-val {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .modal-meta-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 20px;
+  }
+  .meta-box {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px;
+    text-align: left;
+  }
+  .meta-box .ml { font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .meta-box .mv { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; }
+  .meta-box .mv.gold { color: var(--gold); }
+  .meta-box .mv.green { color: var(--green); }
+  .meta-box .mv.purple { color: var(--accent); }
+
+  /* Gamepass in modal */
+  .modal-gp-box {
+    background: linear-gradient(135deg, rgba(124,92,252,0.08), rgba(252,92,125,0.05));
+    border: 1px solid rgba(124,92,252,0.25);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+    text-align: left;
+  }
+  .modal-gp-emoji { font-size: 2rem; }
+  .modal-gp-info { flex: 1; }
+  .modal-gp-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.82rem; margin-bottom: 4px; }
+  .modal-gp-id { font-size: 0.68rem; color: var(--muted); }
+  .modal-gp-status {
+    background: rgba(57,217,138,0.1);
+    border: 1px solid rgba(57,217,138,0.25);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 0.62rem;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  .btn-wa {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%;
+    background: #25d366; color: #fff;
+    border: none; border-radius: 9px;
+    padding: 13px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700; font-size: 0.82rem;
+    cursor: pointer; margin-bottom: 9px;
+    transition: all 0.2s;
+  }
+  .btn-wa:hover { background: #1db857; transform: translateY(-1px); }
+
+  .btn-close {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-close:hover { border-color: var(--border2); color: var(--text); }
+
+  /* ===== TRUST BAR ===== */
+  .trust {
+    display: flex; justify-content: center; align-items: center;
+    gap: 24px; flex-wrap: wrap;
+    padding: 0 20px 50px;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.68rem; color: var(--muted);
+  }
+  .trust-item .ti { font-size: 0.9rem; }
 </style>
+</head>
+<body>
+<div class="bg-fx"></div>
+<div class="grid-fx"></div>
 
-<h2 class="sr-only">Sailor Piece Wiki — panduan lengkap sword, melee, build, dan tier list untuk Roblox</h2>
+<div class="wrapper">
 
-<div class="w">
-
-<div class="hero">
-  <div class="hero-top">
-    <div>
-      <div class="hero-wordmark">
-        <div class="hero-anchor">⚓</div>
-        <div class="hero-title">Sailor<em>Piece</em> Wiki</div>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-gem">💎</div>
+      <div class="logo-text">RBX<em>Store</em></div>
+    </div>
+    <div class="header-right">
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        Online 24/7
       </div>
-      <div class="hero-sub">Panduan lengkap tier list sword, melee, build terbaik, race, clan, dan tips untuk pemain Roblox Sailor Piece.</div>
     </div>
-    <div class="hero-stats">
-      <div class="hstat"><div class="hstat-n">45+</div><div class="hstat-l">Weapons</div></div>
-      <div class="hstat"><div class="hstat-n">5</div><div class="hstat-l">Tier</div></div>
-      <div class="hstat"><div class="hstat-n">Sea 2</div><div class="hstat-l">Soon</div></div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">🎮 Sistem Gamepass</div>
+    <h1>Top Up <span class="g2">Robux</span><br>via <span class="g1">Gamepass</span></h1>
+    <p>Kirim ID gamepass kamu → kami beli → Robux masuk otomatis. Cara paling aman tanpa perlu login akun.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section">
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <span class="how-icon">🛒</span>
+        <div class="how-title">Buat Gamepass</div>
+        <div class="how-desc">Buat gamepass di Roblox Studio dengan harga sesuai Robux yang kamu inginkan</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <span class="how-icon">🔗</span>
+        <div class="how-title">Kirim ID</div>
+        <div class="how-desc">Masukkan link atau ID gamepass ke form di bawah, kami akan verifikasi</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <span class="how-icon">💸</span>
+        <div class="how-title">Bayar ke Kami</div>
+        <div class="how-desc">Lakukan pembayaran sesuai paket. Kami akan membeli gamepass dari akunmu</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">4</div>
+        <span class="how-icon">💎</span>
+        <div class="how-title">Robux Masuk!</div>
+        <div class="how-desc">Robux langsung masuk ke akun Roblox kamu dalam 5–30 menit</div>
+      </div>
     </div>
   </div>
-  <div class="hero-tags">
-    <span class="htag new">✦ Ice Update — 8 Apr 2026</span>
-    <span class="htag new">Moon Update — 31 Mar 2026</span>
-    <span class="htag warn">2x Luck Event aktif</span>
-    <span class="htag">Frost Boss tersedia</span>
-    <span class="htag">Frostbane Clan baru</span>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div>
+
+      <!-- PAKET -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">💰</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Pilih Jumlah Robux</div>
+            <div class="card-head-sub">Harga gamepass harus sesuai jumlah yang dipilih</div>
+          </div>
+        </div>
+        <div class="pkg-grid">
+          <div class="pkg" onclick="selectPkg(this,80,8000)">
+            <span class="pkg-emoji">🪙</span>
+            <div class="pkg-amount">80 R$</div>
+            <div class="pkg-price">Rp 8.000</div>
+          </div>
+          <div class="pkg" onclick="selectPkg(this,160,15000)">
+            <span class="pkg-emoji">🪙</span>
+            <div class="pkg-amount">160 R$</div>
+            <div class="pkg-price">Rp 15.000</div>
+            <div class="pkg-bonus">+bonus 10%</div>
+          </div>
+          <div class="pkg hot" onclick="selectPkg(this,450,40000)">
+            <div class="hot-tag">POPULER</div>
+            <span class="pkg-emoji" style="margin-top:10px">💰</span>
+            <div class="pkg-amount">450 R$</div>
+            <div class="pkg-price">Rp 40.000</div>
+            <div class="pkg-bonus">+bonus 15%</div>
+          </div>
+          <div class="pkg" onclick="selectPkg(this,1000,85000)">
+            <span class="pkg-emoji">💎</span>
+            <div class="pkg-amount">1.000 R$</div>
+            <div class="pkg-price">Rp 85.000</div>
+            <div class="pkg-bonus">+bonus 20%</div>
+          </div>
+          <div class="pkg" onclick="selectPkg(this,2750,220000)">
+            <span class="pkg-emoji">🏆</span>
+            <div class="pkg-amount">2.750 R$</div>
+            <div class="pkg-price">Rp 220.000</div>
+            <div class="pkg-bonus">+bonus 25%</div>
+          </div>
+          <div class="pkg" onclick="selectPkg(this,10000,750000)">
+            <span class="pkg-emoji">👑</span>
+            <div class="pkg-amount">10.000 R$</div>
+            <div class="pkg-price">Rp 750.000</div>
+            <div class="pkg-bonus">+bonus 30%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAMEPASS ID -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">🎫</div>
+          <div class="card-head-text">
+            <div class="card-head-title">ID Gamepass Kamu</div>
+            <div class="card-head-sub">Buat gamepass dengan harga sesuai paket yang dipilih</div>
+          </div>
+        </div>
+
+        <div class="gamepass-guide">
+          <div class="gp-guide-title">📖 Cara Membuat Gamepass</div>
+          <div class="gp-steps">
+            <div class="gp-step">
+              <div class="gp-step-num">1</div>
+              <div>Buka <strong>Roblox Studio</strong> → pilih game kamu → klik tab <strong>View</strong> → <strong>Game Explorer</strong></div>
+            </div>
+            <div class="gp-step">
+              <div class="gp-step-num">2</div>
+              <div>Klik kanan <strong>Game Passes</strong> → <strong>Add Game Pass</strong>, beri nama bebas</div>
+            </div>
+            <div class="gp-step">
+              <div class="gp-step-num">3</div>
+              <div>Set harga gamepass sesuai paket yang dipilih (misal 450 R$ untuk paket 450 R$)</div>
+            </div>
+            <div class="gp-step">
+              <div class="gp-step-num">4</div>
+              <div>Salin link gamepass atau ID-nya (angka di URL), lalu paste di bawah</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gp-input-box">
+          <div class="gp-url-row">
+            <input type="text" id="gp-url" placeholder="https://www.roblox.com/game-pass/123456789/..." oninput="parseGamepassUrl()">
+            <button class="btn-extract" onclick="extractAndVerify()">Verifikasi</button>
+          </div>
+          <div class="gp-divider">ATAU masukkan ID langsung</div>
+          <input type="text" class="gp-id-input" id="gp-id" placeholder="Contoh: 123456789" oninput="onIdInput()">
+
+          <div class="gp-preview" id="gp-preview">
+            <div class="gp-prev-icon">🎫</div>
+            <div class="gp-prev-info">
+              <div class="gp-prev-name" id="gp-prev-name">Top Up Package</div>
+              <div class="gp-prev-id">ID: <span id="gp-prev-id-val">—</span></div>
+              <div class="gp-prev-badge">
+                <span>✓</span> Gamepass terdeteksi
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATA -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">👤</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Data Akun</div>
+            <div class="card-head-sub">Verifikasi pemilik gamepass</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Username Roblox <span class="req">*</span></label>
+          <div class="input-wrap">
+            <input type="text" id="username" placeholder="Username akun pemilik gamepass..." oninput="updateSummary()">
+          </div>
+          <div class="input-hint">⚠️ Harus sama dengan pemilik gamepass yang dibuat</div>
+        </div>
+        <div class="field">
+          <label>WhatsApp / Email <span class="req">*</span></label>
+          <div class="input-wrap">
+            <input type="text" id="contact" placeholder="Untuk notifikasi & konfirmasi...">
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">💳</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Metode Pembayaran</div>
+            <div class="card-head-sub">Bayar ke kami, kami beli gampass kamu</div>
+          </div>
+        </div>
+        <div class="pay-grid" style="grid-template-columns: repeat(3,1fr)">
+          <div class="pay-btn" onclick="selectPay(this,'DANA')">
+            <span class="pay-icon">🔵</span>
+            <div class="pay-name">DANA</div>
+          </div>
+          <div class="pay-btn" onclick="selectPay(this,'GoPay')">
+            <span class="pay-icon">🟢</span>
+            <div class="pay-name">GoPay</div>
+          </div>
+          <div class="pay-btn" onclick="selectPay(this,'QRIS')">
+            <span class="pay-icon">📱</span>
+            <div class="pay-name">QRIS</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUMMARY SIDEBAR -->
+    <div>
+      <div class="summary">
+        <div class="sum-head">📋 Ringkasan Order</div>
+
+        <div class="rbx-display">
+          <div class="rbx-big" id="sum-rbx">— R$</div>
+          <div class="rbx-sub">Robux yang akan kamu terima</div>
+        </div>
+
+        <!-- Gamepass summary -->
+        <div class="gp-sum-box">
+          <div class="gp-sum-icon">🎫</div>
+          <div class="gp-sum-info">
+            <div class="gp-sum-label">ID Gamepass</div>
+            <div class="gp-sum-val empty" id="sum-gpid">Belum diisi</div>
+          </div>
+        </div>
+
+        <div class="pend-box">
+          ⏳ Robux masuk <strong>5–30 menit</strong> setelah pembayaran. Status: <strong>PENDING</strong>
+        </div>
+
+        <div class="sum-row"><span class="k">Paket</span><span class="v" id="sum-pkg">—</span></div>
+        <div class="sum-row"><span class="k">Username</span><span class="v" id="sum-user">—</span></div>
+        <div class="sum-row"><span class="k">Metode Bayar</span><span class="v" id="sum-pay">—</span></div>
+        <div class="sum-row"><span class="k">Biaya Admin</span><span class="v">Rp 0</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-total">
+          <span class="k">Total Bayar</span>
+          <span class="v" id="sum-total">Rp —</span>
+        </div>
+
+        <button class="btn-order" id="btn-order" onclick="placeOrder()" disabled>
+          🚀 ORDER SEKARANG
+        </button>
+        <div class="sum-footnote">
+          🔒 Transaksi aman & terenkripsi<br>
+          Tanpa login akun Roblox kamu
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="hero-bar"><div class="hero-bar-fill"></div></div>
+
+  <!-- TRUST -->
+  <div class="trust">
+    <div class="trust-item"><span class="ti">🔐</span> Tanpa Password</div>
+    <div class="trust-item"><span class="ti">⚡</span> 5–30 Menit</div>
+    <div class="trust-item"><span class="ti">✅</span> 50K+ Transaksi</div>
+    <div class="trust-item"><span class="ti">🕐</span> 24/7 Online</div>
+    <div class="trust-item"><span class="ti">💯</span> Garansi Aman</div>
+  </div>
+
 </div>
 
-<div class="nav">
-  <button class="nb on" onclick="tab('sword',this)">⚔ Sword</button>
-  <button class="nb" onclick="tab('melee',this)">✊ Melee</button>
-  <button class="nb" onclick="tab('build',this)">🏗 Build</button>
-  <button class="nb" onclick="tab('race',this)">🧬 Race & Clan</button>
-  <button class="nb" onclick="tab('tips',this)">💡 Tips</button>
-</div>
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modal" onclick="closeOutside(event)">
+  <div class="modal">
+    <span class="modal-icon-big">⏳</span>
+    <h2>Order Diterima!</h2>
+    <div class="status-chip">
+      <div class="live-dot"></div>
+      PENDING — Diproses
+    </div>
 
-<div id="s-sword" class="sec on">
-  <div class="notice notice-ice"><div class="notice-dot nd-ice"></div><div><b>Ice Queen (S+)</b> ditambahkan Ice Update 8 April — V Move AoE masif + iFrames ~2 detik cooldown, tercepat di antara S+ swords. Butuh Frostbane Clan untuk unlock V Move. Klik nama sword untuk detail.</div></div>
-  <div id="wd" class="card-detail"></div>
-  <div class="sec-head">Tier list sword — Ice Update 2026</div>
-  <div class="tier-row t-sp"><div class="tier-lbl"><div class="tier-letter">S+</div><div class="tier-dot-row"><div class="tier-star"></div><div class="tier-star"></div></div></div><div class="tier-chips"><div class="chip" onclick="sw('sm',this)"><span class="ci">👑</span>Shadow Monarch</div><div class="chip" onclick="sw('iq',this)"><span class="ci">❄</span>Ice Queen</div><div class="chip" onclick="sw('ta',this)"><span class="ci">🌙</span>True Aizen</div><div class="chip" onclick="sw('at',this)"><span class="ci">⚡</span>Atomic</div></div></div>
-  <div class="tier-row t-s"><div class="tier-lbl"><div class="tier-letter">S</div></div><div class="tier-chips"><div class="chip" onclick="sw('ae',this)"><span class="ci">🌊</span>Abyssal Empress</div><div class="chip" onclick="sw('ym',this)"><span class="ci">🗡</span>Yamato</div><div class="chip" onclick="sw('tm',this)"><span class="ci">🔮</span>True Manipulator</div></div></div>
-  <div class="tier-row t-a"><div class="tier-lbl"><div class="tier-letter">A</div></div><div class="tier-chips"><div class="chip"><span class="ci">⚔</span>Jinwoo</div><div class="chip"><span class="ci">🔥</span>Saber Alter</div><div class="chip"><span class="ci">💫</span>Ichigo</div><div class="chip"><span class="ci">✨</span>Escanor</div></div></div>
-  <div class="tier-row t-b"><div class="tier-lbl"><div class="tier-letter">B</div></div><div class="tier-chips"><div class="chip"><span class="ci">⚔</span>Gryphon</div><div class="chip"><span class="ci">⚔</span>Dark Blade</div><div class="chip"><span class="ci">⚔</span>Bisento</div></div></div>
-  <div class="tier-row t-c"><div class="tier-lbl"><div class="tier-letter">C</div></div><div class="tier-chips"><div class="chip"><span class="ci">⚔</span>Katana</div><div class="chip"><span class="ci">⚔</span>Cutlass</div></div></div>
-</div>
+    <div class="modal-progress">
+      <div class="modal-progress-fill"></div>
+    </div>
 
-<div id="s-melee" class="sec">
-  <div class="notice notice-moon"><div class="notice-dot nd-moon"></div><div><b>Moon Slayer + Strongest Shinobi</b> — dua melee terkuat post Moon Update (31 Mar 2026). Keduanya punya AoE besar, DPS tinggi, dan performa luar biasa untuk PvP dan boss farming. Klik untuk detail.</div></div>
-  <div id="md" class="card-detail"></div>
-  <div class="sec-head">Tier list melee / fighting style</div>
-  <div class="tier-row t-sp"><div class="tier-lbl"><div class="tier-letter">S+</div><div class="tier-dot-row"><div class="tier-star"></div><div class="tier-star"></div></div></div><div class="tier-chips"><div class="chip" onclick="ml('ms',this)"><span class="ci">🌙</span>Moon Slayer</div><div class="chip" onclick="ml('ss',this)"><span class="ci">🥷</span>Strongest Shinobi</div></div></div>
-  <div class="tier-row t-s"><div class="tier-lbl"><div class="tier-letter">S</div></div><div class="tier-chips"><div class="chip" onclick="ml('gm',this)"><span class="ci">🏺</span>Gilgamesh</div><div class="chip" onclick="ml('an',this)"><span class="ci">👁</span>Anos</div><div class="chip" onclick="ml('bm',this)"><span class="ci">✨</span>Blessed Maiden</div><div class="chip"><span class="ci">⚔</span>Saber Alter</div></div></div>
-  <div class="tier-row t-a"><div class="tier-lbl"><div class="tier-letter">A</div></div><div class="tier-chips"><div class="chip"><span class="ci">👊</span>Strongest in History</div><div class="chip"><span class="ci">🔱</span>Alucard</div><div class="chip"><span class="ci">🌀</span>Acheron</div></div></div>
-  <div class="tier-row t-b"><div class="tier-lbl"><div class="tier-letter">B</div></div><div class="tier-chips"><div class="chip"><span class="ci">👊</span>Qin Shi</div><div class="chip"><span class="ci">⚡</span>Madoka</div></div></div>
-</div>
+    <p class="modal-desc">
+      Pesanan kamu sedang <strong>diverifikasi</strong>. Setelah pembayaran dikonfirmasi, kami akan membeli gamepass kamu dan Robux akan masuk dalam <strong>5–30 menit</strong>.
+    </p>
 
-<div id="s-build" class="sec">
-  <div class="sec-head">Meta builds terbaik — April 2026</div>
-  <div class="bcards">
-    <div class="bcard"><div class="bcard-head"><div class="bcard-icon gold">👑</div><div><div class="bcard-title">Sword Meta Build</div><div class="bcard-sub">Damage maksimum</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Sword</span><span class="bv gold">Shadow Monarch</span></div><div class="brow"><span class="bk">Race</span><span class="bv">Swordblessed</span></div><div class="brow"><span class="bk">Clan</span><span class="bv">Pride / Upper</span></div><div class="brow"><span class="bk">Trait</span><span class="bv">Emperor</span></div><div class="brow"><span class="bk">Spec Passive</span><span class="bv">Rampage</span></div><div class="brow"><span class="bk">Title</span><span class="bv gold">Six Eyed Demon</span></div><div class="brow"><span class="bk">Fruit</span><span class="bv">Light / Quake</span></div><div class="brow"><span class="bk">Accessory</span><span class="bv">Moon Outfit</span></div></div></div>
-    <div class="bcard"><div class="bcard-head"><div class="bcard-icon purple">🥷</div><div><div class="bcard-title">Melee Meta Build</div><div class="bcard-sub">Burst + AoE</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Melee</span><span class="bv gold">Moon Slayer</span></div><div class="brow"><span class="bk">Race</span><span class="bv">Warlord / Servant</span></div><div class="brow"><span class="bk">Clan</span><span class="bv gold">Upper (+40% DMG)</span></div><div class="brow"><span class="bk">Trait</span><span class="bv">Emperor / Celestial</span></div><div class="brow"><span class="bk">Spec Passive</span><span class="bv">Rampage + Berserker</span></div><div class="brow"><span class="bk">Title</span><span class="bv gold">Six Eyed Demon</span></div><div class="brow"><span class="bk">Power</span><span class="bv">Colossus</span></div><div class="brow"><span class="bk">Accessory</span><span class="bv">Moon Outfit</span></div></div></div>
-    <div class="bcard"><div class="bcard-head"><div class="bcard-icon green">🌾</div><div><div class="bcard-title">Farming Build</div><div class="bcard-sub">Drop rate & efisiensi</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Sword</span><span class="bv">Atomic / Yamato</span></div><div class="brow"><span class="bk">Race</span><span class="bv gold">Kitsune (+25% Luck)</span></div><div class="brow"><span class="bk">Clan</span><span class="bv">Eminence</span></div><div class="brow"><span class="bk">Trait</span><span class="bv">Emperor</span></div><div class="brow"><span class="bk">Spec Passive</span><span class="bv">Fortune Chosen</span></div><div class="brow"><span class="bk">Fruit</span><span class="bv">Quake (AoE)</span></div><div class="brow"><span class="bk">Lokasi</span><span class="bv">Shibuya Station</span></div></div></div>
-    <div class="bcard"><div class="bcard-head"><div class="bcard-icon blue">🆕</div><div><div class="bcard-title">Early / Mid Game</div><div class="bcard-sub">Pemula</div></div></div><div class="bcard-body"><div class="brow"><span class="bk">Sword</span><span class="bv">Gryphon → Ichigo</span></div><div class="brow"><span class="bk">Melee</span><span class="bv gold">Qin Shi (murah)</span></div><div class="brow"><span class="bk">Race</span><span class="bv">Fishman (leveling)</span></div><div class="brow"><span class="bk">Clan</span><span class="bv">Monarch / Espada</span></div><div class="brow"><span class="bk">Fruit</span><span class="bv">Flame (early AoE)</span></div><div class="brow"><span class="bk">Goal</span><span class="bv">Skill Tree Lv.7000</span></div></div></div>
-  </div>
-  <div class="sec-head">Cara maksimalkan damage</div>
-  <div class="dmg-grid">
-    <div class="dmg-card"><div class="dmg-icon">⚔</div><div class="dmg-title">Upgrade ke B10</div><div class="dmg-desc">Blessing NPC di Shibuya Station. Weapon cuma 50% efektif tanpa max blessing. Pasang Spec Passive Rampage untuk damage buff terbesar.</div></div>
-    <div class="dmg-card"><div class="dmg-icon">📊</div><div class="dmg-title">Skill Tree (Lv.7000)</div><div class="dmg-desc">Beri 1000 Gems ke Skill Master di Slime Island. Prioritaskan Damage dan Critical Hit. Max juga stats dari Boss Rush dan Infinite Tower shop.</div></div>
-    <div class="dmg-card"><div class="dmg-icon">👑</div><div class="dmg-title">Title Six Eyed Demon</div><div class="dmg-desc">+85% Damage Buff — terbesar di game. Drop dari Moon Slayer boss. Extreme mode: 1.25% drop rate. Normal: 0.7%.</div></div>
-    <div class="dmg-card"><div class="dmg-icon">🌀</div><div class="dmg-title">Haki + Colossus</div><div class="dmg-desc">Unlock semua Haki, Conqueror Haki cap: 35. Gunakan Colossus Power. Abyssal Crown Set artifact dari high-level NPCs. Rune cap: 60.</div></div>
-  </div>
-</div>
+    <div class="order-box">
+      <div class="order-box-label">Nomor Order</div>
+      <div class="order-id-val" id="modal-oid">RBX-000000</div>
+    </div>
 
-<div id="s-race" class="sec">
-  <div class="sec-head">Race terbaik — Ice Update 2026</div>
-  <div class="race-list">
-    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Luckborn</span><span class="badge b-sp">S+ · Mythical · Baru</span></div><div class="rcard-desc">+35% Luck Multiplier · buff sword & melee DMG. Ditambahkan Ice Update 8 April 2026 — terbaik untuk farming rare drops saat ini.</div><div class="rcard-bars"><div class="stat-bar"><div class="sb-row"><span class="sb-key">Luck</span><span class="sb-val">100</span></div><div class="sb-track"><div class="sb-fill" style="width:100%;background:#1D9E75"></div></div></div><div class="stat-bar"><div class="sb-row"><span class="sb-key">Damage</span><span class="sb-val">75</span></div><div class="sb-track"><div class="sb-fill" style="width:75%;background:#BA7517"></div></div></div></div></div>
-    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Sunborn</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">+80% Max HP · +70% DMG · +20% Sword DMG Multi · +3% Lifesteal · +10% DMG Reduction — all-around terbaik untuk PvE dan survivability.</div><div class="rcard-bars"><div class="stat-bar"><div class="sb-row"><span class="sb-key">HP</span><span class="sb-val">100</span></div><div class="sb-track"><div class="sb-fill" style="width:100%;background:#E24B4A"></div></div></div><div class="stat-bar"><div class="sb-row"><span class="sb-key">Damage</span><span class="sb-val">95</span></div><div class="sb-track"><div class="sb-fill" style="width:95%;background:#BA7517"></div></div></div></div></div>
-    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Swordblessed</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">+20% Sword DMG Multiplier — wajib untuk Sword build. Drop 0.05% (ada pity system). Pasangkan dengan Emperor trait + Shadow Monarch.</div></div>
-    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Warlord</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">Massive HP & Damage boost · Melee DMG multiplier terbesar — pilihan utama untuk Melee build. Pasangkan dengan Moon Slayer atau Strongest Shinobi.</div></div>
-    <div class="rcard"><div class="rcard-head"><span class="rcard-name">Kitsune</span><span class="badge b-myth">S · Mythical</span></div><div class="rcard-desc">+25% Luck · buff sword & melee DMG — raja farming boss drops dan rare items di endgame. Terbaik dipakai bersama Eminence clan.</div></div>
-  </div>
-  <div class="sec-head">Clan terbaik</div>
-  <div class="clans">
-    <div class="clan"><div class="clan-name"><span class="cn-lbl">Frostbane</span><span class="badge b-sp" style="font-size:10px">S+ · Baru</span></div><div class="clan-desc"><span class="g">+40% DMG</span> · +47% HP · +10% Sword DMG<br>Clan terkuat post Ice Update</div></div>
-    <div class="clan"><div class="clan-name"><span class="cn-lbl">Upper</span><span class="badge b-leg" style="font-size:10px">S</span></div><div class="clan-desc"><span class="g">+40% DMG</span> · +50% Max HP · +12% Melee DMG · +12% Luck</div></div>
-    <div class="clan"><div class="clan-name"><span class="cn-lbl">Alter</span><span class="badge b-leg" style="font-size:10px">S</span></div><div class="clan-desc">+35% DMG · +50% HP · +10% Melee<br>After 5 ability → <span class="g">1.5x DMG</span></div></div>
-    <div class="clan"><div class="clan-name"><span class="cn-lbl">Eminence</span><span class="badge b-leg" style="font-size:10px">S</span></div><div class="clan-desc">Best farming — <span class="g">drop rate bonus</span> + solid damage. Monarch + Alter solid alternatives.</div></div>
-    <div class="clan"><div class="clan-name"><span class="cn-lbl">Pride</span><span class="badge b-rare" style="font-size:10px">A</span></div><div class="clan-desc">+30% DMG · +45% HP · +10% Sword DMG · +10% Luck</div></div>
-    <div class="clan"><div class="clan-name"><span class="cn-lbl">Monarch</span><span class="badge b-rare" style="font-size:10px">A</span></div><div class="clan-desc">+27% DMG · +40% HP · +7% Sword DMG · +10% Luck · 20% chance +1 drop</div></div>
-  </div>
-</div>
+    <div class="modal-gp-box">
+      <div class="modal-gp-emoji">🎫</div>
+      <div class="modal-gp-info">
+        <div class="modal-gp-title" id="modal-gp-name">Gamepass</div>
+        <div class="modal-gp-id">ID: <span id="modal-gp-id">—</span></div>
+      </div>
+      <div class="modal-gp-status">✓ Verified</div>
+    </div>
 
-<div id="s-tips" class="sec">
-  <div class="sec-head">Tips dari pemula hingga endgame</div>
-  <div class="tips-list">
-    <div class="tip"><div class="tip-num">1</div><div><div class="tip-title">Mulai dengan Qin Shi + Gryphon</div><div class="tip-text">Keduanya murah, mudah didapat, dan cukup kuat untuk mid-game. Gryphon bisa carry sampai late-game kalau di-max. Upgrade ke Ichigo saat sudah mampu.</div></div></div>
-    <div class="tip"><div class="tip-num">2</div><div><div class="tip-title">Upgrade weapon ke B10 di Blessing NPC</div><div class="tip-text">Weapon hanya 50% efektif tanpa max blessing. Pergi ke Blessing NPC di Shibuya Station, upgrade semua ke B10 sebelum farming serius. Pasang Spec Passive Rampage.</div></div></div>
-    <div class="tip"><div class="tip-num">3</div><div><div class="tip-title">Unlock Skill Tree di Level 7000</div><div class="tip-text">Beri 1000 Gems ke Skill Master di Slime Island. Prioritaskan Damage dan Critical Hit terlebih dahulu. Max juga dari Boss Rush dan Infinite Tower shop.</div></div></div>
-    <div class="tip"><div class="tip-num">4</div><div><div class="tip-title">Incar Title Six Eyed Demon (+85% DMG)</div><div class="tip-text">Title terkuat di game, drop dari Moon Slayer boss. Farm di Extreme mode (1.25% chance) untuk efisiensi terbaik. Normal mode hanya 0.7%.</div></div></div>
-    <div class="tip"><div class="tip-num">5</div><div><div class="tip-title">Light Fruit wajib di late-game</div><div class="tip-text">Memungkinkan terbang — navigasi antar island jauh lebih cepat. Alternatif: Quake Fruit untuk AoE mob farming di Shibuya Station.</div></div></div>
-    <div class="tip"><div class="tip-num">6</div><div><div class="tip-title">Cara cepat material Ice Queen</div><div class="tip-text">Frost Relic drop dari SEMUA NPC di game — farm paling efisien di Lawless Island Arena Fighters. Butuh Frost Empress title sebelum bisa craft Ice Queen.</div></div></div>
-    <div class="tip"><div class="tip-num">7</div><div><div class="tip-title">Pakai pity system untuk race Mythical</div><div class="tip-text">Race seperti Swordblessed dan Warlord drop 0.05%, tapi ada pity system. Kumpulkan Race Rerolls dan grind sampai dapat — investasi terbaik untuk build endgame.</div></div></div>
-  </div>
-  <div class="sec-head">Lokasi penting di map</div>
-  <div class="locs">
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Sailor Island</div><div class="loc-desc">Fruit Dealer · Stats Reroll · Jinwoo Trainer · Upgrade stats ke Z tier pakai gems</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Shibuya Station</div><div class="loc-desc">Blessing NPC (upgrade B10) · Mob farming efisien dengan Quake Fruit</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Boss Island</div><div class="loc-desc">Shadow Monarch boss · Moon Slayer Trainer · Frost Boss (Ice Queen) · Double Dungeon</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Ninja Island</div><div class="loc-desc">Strongest Shinobi materials · Ninja boss fight</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Lawless Island</div><div class="loc-desc">Atomic Trainer · Arena Fighters untuk Frost Relic farming</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Academy Island</div><div class="loc-desc">Anos unlock — butuh Demon King Title sebagai prasyarat</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Slime Island</div><div class="loc-desc">Skill Master NPC — unlock Skill Tree di Lv.7000 + 1000 Gems</div></div>
-    <div class="loc"><div class="loc-name"><div class="loc-dot"></div>Tower Island</div><div class="loc-desc">Infinite Tower — farm Tower Tokens untuk items eksklusif</div></div>
-  </div>
-</div>
+    <div class="modal-meta-grid">
+      <div class="meta-box">
+        <div class="ml">Robux</div>
+        <div class="mv gold" id="modal-rbx">—</div>
+      </div>
+      <div class="meta-box">
+        <div class="ml">Total Bayar</div>
+        <div class="mv green" id="modal-total">—</div>
+      </div>
+      <div class="meta-box">
+        <div class="ml">Username</div>
+        <div class="mv purple" id="modal-user">—</div>
+      </div>
+      <div class="meta-box">
+        <div class="ml">Pembayaran</div>
+        <div class="mv" id="modal-pay">—</div>
+      </div>
+    </div>
 
+    <button class="btn-wa" onclick="openWA()">💬 Konfirmasi via WhatsApp</button>
+    <button class="btn-close" onclick="closeModal()">Tutup</button>
+  </div>
 </div>
 
 <script>
-const SW={
-  sm:{n:'Shadow Monarch',i:'👑',t:'S+',r:'Mythical',bc:'b-myth',
-    d:'Sword terkuat di game saat ini. Damage tertinggi di seluruh kategori, AoE masif, iFrames terbaik, dan crowd control luar biasa. Progression chain panjang tapi hasilnya sepadan.',
-    h:'<b>1.</b> Beli Jinwoo Sword (2.5jt Money dari Sailor Island Jinwoo Trainer) <b>2.</b> Farm Monarch Core dari Jinwoo boss <b>3.</b> Kalahkan Shadow Monarch boss di Double Dungeon (Boss Island) <b>4.</b> Beli dari Shadow Monarch Trainer di Dungeon Island rooftop (pojok kiri)',
-    s:{Damage:100,AoE:95,Speed:75,PvP:98,Farming:90},
-    mv:[['Z','Shadow Strike'],['X','Army of Shadows'],['C','Shadow Exchange'],['V','Monarch Slash'],['F','Arise (Mastery)']]},
-  iq:{n:'Ice Queen',i:'❄',t:'S+',r:'Mythical',bc:'b-sp',
-    d:'Sword terbaru dari Ice Update 8 April 2026. V Move AoE masif + iFrames dengan cooldown ~2 detik — tercepat di antara semua S+ swords. Frostbane Clan wajib untuk unlock V Move.',
-    h:'<b>Prasyarat:</b> punya Frost Empress title dulu → Kalahkan Frost Boss (summonable) di Boss Island → Farm materials: Ice Core (0.53%), Frozen Brand (1.21%), Glacier Remnant (5.37%). Frost Relic drop dari semua NPC — efisiensi terbaik di Lawless Island Arena Fighters.',
-    s:{Damage:95,AoE:98,Speed:92,PvP:88,Farming:93},
-    mv:[['Z','Frost Shard'],['X','Blizzard Slash'],['C','Ice Prison'],['V','Glacial Nova'],['F','Ice Empress (Mastery)']]},
-  ta:{n:'True Aizen',i:'🌙',t:'S+',r:'Mythical',bc:'b-myth',
-    d:'Obtainment susah tapi payoff-nya luar biasa. Cooldown skill sangat rendah sehingga bisa di-spam untuk overwhelm musuh. Performa PvP terbaik di antara semua sword.',
-    h:'Cari Aizen Trainer (lokasi update-an terbaru) · Butuh items dari Aizen boss fight · Selesaikan Mastery Quest untuk unlock F Move. Cek Discord untuk info lokasi terbaru.',
-    s:{Damage:95,AoE:85,Speed:97,PvP:100,Farming:83},
-    mv:[['Z','Shatter'],['X','Kurohitsugi'],['C','Fragor'],['V','Ultrafragor'],['F','Final Getsuga']]},
-  at:{n:'Atomic',i:'⚡',t:'S+',r:'Mythical',bc:'b-myth',
-    d:'Ditambahkan di Huge Update. AoE sangat luas dan damage tinggi — terbaik untuk farming boss dan grinding efisien. Lebih mudah didapat dibanding Shadow Monarch.',
-    h:'Beli dari Atomic Trainer di Lawless Island · Butuh Coins + Gems + specific materials. Selesaikan Mastery Quest untuk unlock F Move.',
-    s:{Damage:92,AoE:91,Speed:87,PvP:87,Farming:96},
-    mv:[['Z','Atomic Slash'],['X','Particle Beam'],['C','Nuclear Surge'],['V','Atom Buster']]},
-  ae:{n:'Abyssal Empress',i:'🌊',t:'S',r:'Legendary',bc:'b-leg',
-    d:'AoE coverage sangat baik, ideal untuk boss rush dan mob farming. Sedikit di bawah S+ dalam raw damage tapi lebih mudah didapat dan tetap top-tier endgame.',
-    h:'Ditambahkan di Huge Update · Cari Abyssal Empress Trainer di lokasi khusus · Butuh specific progression items dan quest completion.',
-    s:{Damage:88,AoE:93,Speed:82,PvP:84,Farming:91},
-    mv:[['Z','Abyss Strike'],['X','Tidal Wave'],['C','Deep Crush'],['V','Empress Wrath']]},
-  ym:{n:'Yamato',i:'🗡',t:'S',r:'Legendary',bc:'b-leg',
-    d:'DPS tinggi, AoE luas, dan multi-stage crowd control. Pilihan solid untuk endgame — alternatif terbaik jika belum dapat Shadow Monarch.',
-    h:'Beli dari Yamato Trainer di late-game island · Butuh specific quest completion dan materials.',
-    s:{Damage:87,AoE:86,Speed:90,PvP:82,Farming:87},
-    mv:[['Z','Oden Slash'],['X','Paradise Totsuka'],['C','Ragnarök'],['V','Kamusari']]},
-  tm:{n:'True Manipulator',i:'🔮',t:'S',r:'Legendary',bc:'b-leg',
-    d:'Attack speed tertinggi di tier S. Kit lengkap dan sangat baik untuk late-game farming dan boss grinding — ideal untuk gaya bermain yang cepat dan agresif.',
-    h:'Upgrade dari Manipulator base sword · Cari Trainer spesifik untuk versi True · Butuh upgrade materials.',
-    s:{Damage:86,AoE:84,Speed:96,PvP:80,Farming:89},
-    mv:[['Z','Puppet Strings'],['X','Control Zone'],['C','Manipulation Field'],['V','True Control']]}
-};
-const ML={
-  ms:{n:'Moon Slayer',i:'🌙',t:'S+',
-    d:'Melee terkuat di game saat ini — Moon Update 31 Mar 2026. Moveset sangat powerful dengan damage besar, AoE luas, dan F Move yang devastatingly kuat.',
-    h:'Kumpulkan materials spesifik dari Moon Slayer boss quest → interaksi dengan Moon Slayer NPC di Boss Island. Butuh quest progression sebelumnya.',
-    s:{Damage:100,AoE:92,Speed:85,PvP:97,Farming:90}},
-  ss:{n:'Strongest Shinobi',i:'🥷',t:'S+',
-    d:'Ditambahkan di Massive Update (sebelumnya Madara). Animasi super smooth, AoE masif, F Move devastatingly powerful. Investasi melee terbaik yang bisa kamu buat.',
-    h:'Grind Ninja Island boss materials → beli dari Trainer dengan Coins + Gems + materials. Selesaikan Mastery Quest.',
-    s:{Damage:98,AoE:95,Speed:91,PvP:93,Farming:92}},
-  gm:{n:'Gilgamesh',i:'🏺',t:'S',
-    d:'Animasi cepat dengan DPS konsisten. Pilihan solid untuk boss fights dan dungeon grinding — performa stabil di PvP dan PvE.',
-    h:'Unlock dari Academy Island atau Trainer tertentu · Butuh specific items dan quest progression.',
-    s:{Damage:90,AoE:85,Speed:96,PvP:88,Farming:87}},
-  an:{n:'Anos',i:'👁',t:'S',
-    d:'Burst damage tertinggi di melee S tier dengan AoE potential luar biasa. Butuh Demon King Title untuk unlock — perjalanan panjang yang sangat rewarding.',
-    h:'Unlock di Academy Island dengan Demon King Title · Farm title dari boss khusus terlebih dahulu.',
-    s:{Damage:95,AoE:90,Speed:82,PvP:90,Farming:85}},
-  bm:{n:'Blessed Maiden',i:'✨',t:'S',
-    d:'Limited-time dari Valentine Event, tapi masih sangat relevan di meta sekarang. All-rounder yang scale dengan baik ke endgame — gunakan jika kamu memilikinya.',
-    h:'Limited time dari Valentine Event — tidak bisa didapat lagi secara normal saat ini.',
-    s:{Damage:88,AoE:88,Speed:88,PvP:86,Farming:88}}
-};
-const BC={Damage:'#E24B4A',AoE:'#BA7517',Speed:'#1D9E75',PvP:'#185FA5',Farming:'#534AB7'};
+  let _rbx = 0, _price = 0, _pkg = '', _pay = '', _gpId = '', _gpVerified = false;
 
-function bars(s){return Object.entries(s).map(([k,v])=>`<div class="stat-bar"><div class="sb-row"><span class="sb-key">${k}</span><span class="sb-val">${v}</span></div><div class="sb-track"><div class="sb-fill" style="width:${v}%;background:${BC[k]||'#888'}"></div></div></div>`).join('')}
+  function selectPkg(el, rbx, price) {
+    document.querySelectorAll('.pkg').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    _rbx = rbx; _price = price;
+    _pkg = rbx.toLocaleString('id') + ' R$';
+    updateSummary();
+  }
 
-function renderDetail(o,isMelee){
-  const mv=(o.mv||[]).map(([k,n])=>`<div class="move-pill"><div class="move-k">${k}</div><div class="move-n">${n}</div></div>`).join('');
-  const tBadge=isMelee?`<span class="badge b-sp">${o.t} · Melee Spec</span>`:`<span class="badge ${o.bc}">${o.t} · ${o.r}</span>`;
-  return `<div class="cd-head"><div class="cd-title-row"><div class="cd-icon">${o.i}</div><div><div class="cd-name">${o.n}</div><div class="cd-badges">${tBadge}</div></div></div><button class="cd-close" onclick="closeD(this)">✕ tutup</button></div><div class="cd-desc">${o.d}</div><div class="cd-2col"><div>${bars(o.s)}</div><div><div class="cd-section-label">Cara mendapatkan</div><div class="how-box">${o.h}</div></div></div>${mv?`<div class="moves-wrap"><div class="cd-section-label">Moves</div><div class="moves-grid">${mv}</div></div>`:''}`
-}
+  function selectPay(el, method) {
+    document.querySelectorAll('.pay-btn').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    _pay = method;
+    updateSummary();
+  }
 
-function sw(id,el){
-  const box=document.getElementById('wd');
-  const prev=box.dataset.c;
-  document.querySelectorAll('#s-sword .chip').forEach(c=>c.classList.remove('on'));
-  if(prev===id){box.classList.remove('open');box.dataset.c='';return}
-  box.dataset.c=id;box.innerHTML=renderDetail(SW[id],false);box.classList.add('open');
-  el.classList.add('on');
-  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
-}
-function ml(id,el){
-  const box=document.getElementById('md');
-  const prev=box.dataset.c;
-  document.querySelectorAll('#s-melee .chip').forEach(c=>c.classList.remove('on'));
-  if(prev===id){box.classList.remove('open');box.dataset.c='';return}
-  box.dataset.c=id;box.innerHTML=renderDetail(ML[id],true);box.classList.add('open');
-  el.classList.add('on');
-  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
-}
-function closeD(btn){
-  const box=btn.closest('.card-detail');
-  box.classList.remove('open');box.dataset.c='';
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-}
-function tab(id,btn){
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('s-'+id).classList.add('on');btn.classList.add('on');
-  const wd=document.getElementById('wd');const md=document.getElementById('md');
-  if(wd){wd.classList.remove('open');wd.dataset.c='';}
-  if(md){md.classList.remove('open');md.dataset.c='';}
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-}
+  function parseGamepassUrl() {
+    const url = document.getElementById('gp-url').value.trim();
+    const match = url.match(/game-pass\/(\d+)/i);
+    if (match) {
+      document.getElementById('gp-id').value = match[1];
+      onIdInput();
+    }
+  }
+
+  function extractAndVerify() {
+    parseGamepassUrl();
+    const id = document.getElementById('gp-id').value.trim();
+    if (id) showGamepassPreview(id);
+  }
+
+  function onIdInput() {
+    const id = document.getElementById('gp-id').value.trim();
+    if (id.length >= 6 && /^\d+$/.test(id)) {
+      setTimeout(() => showGamepassPreview(id), 300);
+    } else {
+      hidePreview();
+    }
+    updateSummary();
+  }
+
+  function showGamepassPreview(id) {
+    _gpId = id;
+    _gpVerified = true;
+    document.getElementById('gp-prev-id-val').textContent = id;
+    document.getElementById('gp-preview').classList.add('show');
+    updateSummary();
+  }
+
+  function hidePreview() {
+    _gpId = '';
+    _gpVerified = false;
+    document.getElementById('gp-preview').classList.remove('show');
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const user = document.getElementById('username').value.trim();
+    const gpId = document.getElementById('gp-id').value.trim();
+
+    document.getElementById('sum-rbx').textContent = _rbx ? _rbx.toLocaleString('id') + ' R$' : '— R$';
+    document.getElementById('sum-pkg').textContent = _pkg || '—';
+    document.getElementById('sum-user').textContent = user || '—';
+    document.getElementById('sum-pay').textContent = _pay || '—';
+    document.getElementById('sum-total').textContent = _price ? 'Rp ' + _price.toLocaleString('id') : 'Rp —';
+
+    const gpIdDisplay = document.getElementById('sum-gpid');
+    if (gpId) {
+      gpIdDisplay.textContent = gpId;
+      gpIdDisplay.classList.remove('empty');
+    } else {
+      gpIdDisplay.textContent = 'Belum diisi';
+      gpIdDisplay.classList.add('empty');
+    }
+
+    const canOrder = _pkg && _pay && user && gpId.length >= 6;
+    document.getElementById('btn-order').disabled = !canOrder;
+  }
+
+  // ============================================================
+  // MIDTRANS INTEGRATION
+  // ============================================================
+  // Cara kerja:
+  // 1. Frontend kirim data order ke backend kamu (endpoint: /api/create-transaction)
+  // 2. Backend buat transaksi di Midtrans & kembalikan snap_token
+  // 3. Frontend buka Snap popup pakai snap_token tsb
+  //
+  // Ganti BACKEND_URL dengan URL server kamu.
+  // ============================================================
+  const BACKEND_URL = 'https://chisatobobaaaa.vercel.app';
+
+  async function placeOrder() {
+    const oid = 'RBX-' + Math.floor(100000 + Math.random() * 900000);
+    const user = document.getElementById('username').value.trim();
+    const gpId = document.getElementById('gp-id').value.trim();
+
+    // Simpan data order untuk ditampilkan di modal konfirmasi
+    _currentOrder = { oid, user, gpId };
+
+    // Disable tombol & tampilkan loading
+    const btn = document.getElementById('btn-order');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses...';
+
+    try {
+      // ── LANGKAH 1: Minta snap_token dari backend ──
+      const resp = await fetch(`${BACKEND_URL}/api/create-transaction`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_id: oid,
+          gross_amount: _price,
+          robux: _rbx,
+          username: user,
+          gamepass_id: gpId,
+          payment_method: _pay,
+          item_name: `Top Up ${_rbx.toLocaleString('id')} Robux`,
+        })
+      });
+
+      if (!resp.ok) throw new Error('Gagal membuat transaksi. Coba lagi.');
+      const { snap_token } = await resp.json();
+
+      // ── LANGKAH 2: Buka Snap popup Midtrans ──
+      window.snap.pay(snap_token, {
+        onSuccess: function(result) {
+          // Pembayaran berhasil
+          showOrderModal(oid, user, gpId, result.payment_type || _pay);
+        },
+        onPending: function(result) {
+          // Menunggu pembayaran (transfer bank, dll)
+          showOrderModal(oid, user, gpId, result.payment_type || _pay);
+        },
+        onError: function(result) {
+          alert('❌ Pembayaran gagal: ' + (result.status_message || 'Coba lagi.'));
+        },
+        onClose: function() {
+          // User tutup popup tanpa bayar — tidak perlu action
+        }
+      });
+
+    } catch (err) {
+      // ── FALLBACK: jika backend belum siap, tampilkan modal simulasi ──
+      console.warn('[Midtrans] Backend belum tersedia, mode simulasi:', err.message);
+      showOrderModal(oid, user, gpId, _pay);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🚀 ORDER SEKARANG';
+    }
+  }
+
+  let _currentOrder = {};
+
+  function showOrderModal(oid, user, gpId, payMethod) {
+    document.getElementById('modal-oid').textContent = oid;
+    document.getElementById('modal-rbx').textContent = _rbx.toLocaleString('id') + ' R$';
+    document.getElementById('modal-total').textContent = 'Rp ' + _price.toLocaleString('id');
+    document.getElementById('modal-user').textContent = user;
+    document.getElementById('modal-pay').textContent = payMethod;
+    document.getElementById('modal-gp-id').textContent = gpId;
+    document.getElementById('modal-gp-name').textContent = 'Gamepass #' + gpId;
+    document.getElementById('modal').classList.add('show');
+  }
+
+  function closeModal() { document.getElementById('modal').classList.remove('show'); }
+  function closeOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+
+  function openWA() {
+    const oid = document.getElementById('modal-oid').textContent;
+    const user = document.getElementById('modal-user').textContent;
+    const rbx = document.getElementById('modal-rbx').textContent;
+    const gpId = document.getElementById('modal-gp-id').textContent;
+    const total = document.getElementById('modal-total').textContent;
+    const msg = encodeURIComponent(
+      `Halo, saya mau konfirmasi order:\n\n` +
+      `📋 Order ID: ${oid}\n` +
+      `👤 Username: ${user}\n` +
+      `🎫 Gamepass ID: ${gpId}\n` +
+      `💎 Robux: ${rbx}\n` +
+      `💰 Total: ${total}\n\n` +
+      `Mohon diproses ya 🙏`
+    );
+    window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+  }
 </script>
+</body>
+</html>
